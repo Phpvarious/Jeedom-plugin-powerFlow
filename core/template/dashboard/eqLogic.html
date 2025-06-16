@@ -130,7 +130,7 @@
       function log#uid#(text) {
         if (debug#uid#) console.log(text)
       }
-      function getLabel(key){
+      function getLabel(key) {
         return labelsList.find(item => item.key.toLowerCase() === key.toLowerCase())?labelsList.find(item => item.key.toLowerCase() === key.toLowerCase()).data.label:'label-error#uid#';
       }
       /*
@@ -1725,7 +1725,7 @@
                       }
                     } else {
                       innerHTML += _options.value
-                      if (config#uid#.persos[num]['unit'] != '') innerHTML += ' ' + config#uid#.persos[perso].unit
+                      if (config#uid#.persos[num]['unit'] != '') innerHTML += ' ' + config#uid#.persos[num]['unit']
                     }
                     cmd.innerHTML = innerHTML
                   }
