@@ -453,7 +453,7 @@ function addPv(_action) {
         div += '</div>'
         // Name
         div += '<div class="input-group">'
-          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Nom}} <sup><i class="fas fa-question-circle" title="{{Nom a afficher pour identifier le panneau.}}"></i></sup></span>'
+          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Nom}} <sup><i class="fas fa-question-circle" title="{{Nom à afficher pour identifier le panneau.}}"></i></sup></span>'
           div += '<div><input class="pvAttr form-control roundedRight" data-l1key="name"></div>'
         div += '</div>'
       div += '</div>'
@@ -519,7 +519,7 @@ function addLoad(_action) {
         div += '</div>'
         // Name
         div += '<div class="input-group">'
-          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Nom}} <sup><i class="fas fa-question-circle" title="{{Nom a afficher pour identifier le récepteur.}}"></i></sup></span>'
+          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Nom}} <sup><i class="fas fa-question-circle" title="{{Nom à afficher pour identifier le récepteur.}}"></i></sup></span>'
           div += '<input class="loadAttr form-control roundedRight" data-l1key="name">'
         div += '</div>'
 
@@ -598,7 +598,7 @@ function addPerso(_persoAttr = '') {
         div += '</div>'
         div += '<div class="input-group">'
           div += '<span class="input-group-addon roundedLeft" style="min-width: 120px;">{{Texte}} <sup><i class="fas fa-question-circle" title="'
-            div += '{{Texte à afficher}} ({{optionel}})'
+            div += '{{Texte à afficher}} ({{optionnel}})'
           div += '"></i></sup></span>'
           div += '<input class="persoAttr form-control" data-l1key="perso::text" placeholder="">'
           div += '<span class="input-group-addon" style="min-width: 120px;">{{Taille}} <sup><i class="fas fa-question-circle" title="'
@@ -706,14 +706,14 @@ function printEqLogic(_eqLogic) {
       }
     }
     if (!isset(_eqLogic.configuration['solar::color'])) document.querySelector('input[data-l2key="solar::color"]').value = '#ffa500'
-    if (!isset(_eqLogic.configuration['solar::color::0'])) document.querySelector('input[data-l2key="solar::color::0"]').value = '#ffa500'
+    if (!isset(_eqLogic.configuration['solar::0::color'])) document.querySelector('input[data-l2key="solar::0::color"]').value = '#ffa500'
     if (!isset(_eqLogic.configuration['grid::color'])) document.querySelector('input[data-l2key="grid::color"]').value = '#5490c2'
-    if (!isset(_eqLogic.configuration['grid::color::sell'])) document.querySelector('input[data-l2key="grid::color::sell"]').value = '#5490c2'
-    if (!isset(_eqLogic.configuration['grid::color::buy'])) document.querySelector('input[data-l2key="grid::color::buy"]').value = '#5490c2'
+    if (!isset(_eqLogic.configuration['grid::sell::color'])) document.querySelector('input[data-l2key="grid::sell::color"]').value = '#5490c2'
+    if (!isset(_eqLogic.configuration['grid::buy::color'])) document.querySelector('input[data-l2key="grid::buy::color"]').value = '#5490c2'
     if (!isset(_eqLogic.configuration['grid::color::nogrid'])) document.querySelector('input[data-l2key="grid::color::nogrid"]').value = '#db041c'
     if (!isset(_eqLogic.configuration['battery::color'])) document.querySelector('input[data-l2key="battery::color"]').value = '#ffc0cb'
-    if (!isset(_eqLogic.configuration['battery::color::charge'])) document.querySelector('input[data-l2key="battery::color::charge"]').value = '#ffc0cb'
-    if (!isset(_eqLogic.configuration['battery::color::discharge'])) document.querySelector('input[data-l2key="battery::color::discharge"]').value = '#ffc0cb'
+    if (!isset(_eqLogic.configuration['battery::charge::color'])) document.querySelector('input[data-l2key="battery::charge::color"]').value = '#ffc0cb'
+    if (!isset(_eqLogic.configuration['battery::discharge::color'])) document.querySelector('input[data-l2key="battery::discharge::color"]').value = '#ffc0cb'
     if (!isset(_eqLogic.configuration['battery::color::state::0'])) document.querySelector('input[data-l2key="battery::color::state::0"]').value = '#ff0000'
     if (!isset(_eqLogic.configuration['battery::color::state::25'])) document.querySelector('input[data-l2key="battery::color::state::25"]').value = '#FF4500'
     if (!isset(_eqLogic.configuration['battery::color::state::50'])) document.querySelector('input[data-l2key="battery::color::state::50"]').value = '#ffa500'
@@ -724,6 +724,6 @@ function printEqLogic(_eqLogic) {
     if (!isset(_eqLogic.configuration['aux::color'])) document.querySelector('input[data-l2key="aux::color"]').value = '#a43df5'
     if (!isset(_eqLogic.configuration['colorWarning'])) document.querySelector('input[data-l2key="colorWarning"]').value = '#ff0000'
     if (!isset(_eqLogic.configuration['inverter::color'])) document.querySelector('input[data-l2key="inverter::color"]').value = '#808080'
-    if (!isset(_eqLogic.configuration['inverter::color::in'])) document.querySelector('input[data-l2key="inverter::color::in"]').value = '#000000'
+    if (!isset(_eqLogic.configuration['inverter::text::in::color'])) document.querySelector('input[data-l2key="inverter::text::in::color"]').value = '#000000'
   }
 }
