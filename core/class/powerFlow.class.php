@@ -93,19 +93,33 @@ class powerFlow extends eqLogic
 
 	/**
 	 * Call by core after save into bdd
-	 
+	 */
 	public function postSave()
 	{
-		log::add(__CLASS__, 'debug', '┌──:fg-success: postSave() :/fg:──');
+		log::add(__CLASS__, 'debug', '┌──:fg-success: ' . $this->getHumanName() . ' --> postSave() :/fg:──');
+		$changeColor = $this->getCmd(null, 'change::color');
+		/*if (is_object($changeColor)) $changeColor->remove();*/
+		if (!is_object($changeColor)) {
+			log::add(__CLASS__, 'debug', '| creation of the change::color command');
+			$changeColor = new powerFlowCmd();
+			$changeColor->setIsVisible(0);
+			$changeColor->setName(__('Changement couleur', __FILE__));
+			$changeColor->setLogicalId('change::color');
+		}
+		$changeColor->setEqLogic_id($this->getId());
+		$changeColor->setType('action');
+		$changeColor->setSubType('message');
+		$changeColor->save();
 		log::add(__CLASS__, 'debug', '└────────────────────');
-	}*/
+
+	}
   
 	public function toHtml($_version = 'dashboard') {
 		$replace = $this->preToHtml($_version);
 		if (!is_array($replace)) {
 			return $replace;
 		}
-		log::add(__CLASS__, 'debug', '┌──:fg-success: toHtml :/fg:──');
+		log::add(__CLASS__, 'debug', '┌──:fg-success: ' . $this->getHumanName() . ' --> toHtml(' . $_version . ') :/fg:──');
 		$version = jeedom::versionAlias($_version);
 		if ($this->getConfiguration('refresh') == '') {
 			$replace['#refresh_id#'] = '';
@@ -187,7 +201,7 @@ class powerFlow extends eqLogic
 				if (preg_match("/^\#(\d+)\#$/", $this->getConfiguration('grid::daily::buy::cmd', ''), $id)) {
 					$replace['#grid_daily_buy_cmd#'] = $id[1];
 					$replace['#dailyGridBuyText#'] = $this->getConfiguration('grid::daily::buy::txt', '');
-					if ($this->getConfiguration('grid::color::buy') != '') $replace['#gridBuyColor#'] = $this->getConfiguration('grid::color::buy');
+					if ($this->getConfiguration('grid::buy::color') != '') $replace['#gridBuyColor#'] = $this->getConfiguration('grid::buy::color');
 				} else log::add(__CLASS__, 'debug', '| KO  grid::daily::buy::cmd not command valid !');
 			}
 		}
@@ -197,7 +211,7 @@ class powerFlow extends eqLogic
 				if (preg_match("/^\#(\d+)\#$/", $this->getConfiguration('grid::daily::sell::cmd', ''), $id)) {
 					$replace['#grid_daily_sell_cmd#'] = $id[1];
 					$replace['#dailyGridSellText#'] = $this->getConfiguration('grid::daily::sell::txt', '');
-					if ($this->getConfiguration('grid::color::sell') != '') $replace['#gridSellColor#'] = $this->getConfiguration('grid::color::sell');
+					if ($this->getConfiguration('grid::sell::color') != '') $replace['#gridSellColor#'] = $this->getConfiguration('grid::sell::color');
 				} else log::add(__CLASS__, 'debug', '| KO  grid::daily::sell::cmd not command valid !');
 			}
 		}
@@ -230,8 +244,8 @@ class powerFlow extends eqLogic
 		if ($this->getConfiguration('solar::color') != '') $replace['#solarColor#'] = $this->getConfiguration('solar::color');
 		if ($this->getConfiguration('solar::color::hide', 0) == 1) {
 			$replace['#pvState0Color#'] = '#ffffff00';
-		} else if ($this->getConfiguration('solar::color::0') != '') {
-			$replace['#pvState0Color#'] = $this->getConfiguration('solar::color::0');
+		} else if ($this->getConfiguration('solar::0::color') != '') {
+			$replace['#pvState0Color#'] = $this->getConfiguration('solar::0::color');
 		}
 		///  PVs  \\\
 		$result_pv = array();
@@ -489,7 +503,7 @@ class powerFlow extends eqLogic
 				if (preg_match("/^\#(\d+)\#$/", $this->getConfiguration('battery::daily::charge::cmd', ''), $id)) {
 					$replace['#battery_daily_charge_cmd#'] = $id[1];
 					$replace['#dailyBatteryChargeText#'] = $this->getConfiguration('battery::daily::charge::txt', '');
-					if ($this->getConfiguration('battery::color::charge') != '') $replace['#batteryChargeColor#'] = $this->getConfiguration('battery::color::charge');
+					if ($this->getConfiguration('battery::charge::color') != '') $replace['#batteryChargeColor#'] = $this->getConfiguration('battery::charge::color');
 				} else log::add(__CLASS__, 'debug', '| KO  battery::daily::charge::cmd not command valid !');
 			}
 		}
@@ -498,7 +512,7 @@ class powerFlow extends eqLogic
 				if (preg_match("/^\#(\d+)\#$/", $this->getConfiguration('battery::daily::discharge::cmd', ''), $id)) {
 					$replace['#battery_daily_discharge_cmd#'] = $id[1];
 					$replace['#dailyBatteryDischargeText#'] = $this->getConfiguration('battery::daily::discharge::txt', '');
-					if ($this->getConfiguration('battery::color::discharge') != '') $replace['#batteryDischargeColor#'] = $this->getConfiguration('battery::color::discharge');
+					if ($this->getConfiguration('battery::discharge::color') != '') $replace['#batteryDischargeColor#'] = $this->getConfiguration('battery::discharge::color');
 				} else log::add(__CLASS__, 'debug', '| KO  battery::daily::discharge::cmd not command valid !');
 			}
 		}
@@ -687,7 +701,7 @@ class powerFlow extends eqLogic
 			$replace['#inverterModel#'] = $this->getConfiguration('inverter::img');
 		}
 		$replace['#inverterColor#'] = $this->getConfiguration('inverter::color', '#808080');
-		$replace['#inverterColorTextIn#'] = $this->getConfiguration('inverter::color::in', '#000000');
+		$replace['#inverterColorTextIn#'] = $this->getConfiguration('inverter::text::in::color', '#000000');
 		/////////////////////////////////////
 		//////////////// AUX ////////////////
 		/////////////////////////////////////
@@ -763,8 +777,12 @@ class powerFlow extends eqLogic
 				$i2++;
 			}
 		}
-		//log::add('powerFlow', 'debug', '$string -> ' . json_encode($result_perso));
 		$replace['#persoarray#'] = json_encode($result_perso);
+		/////////////////////////////////////
+		//////////////// CMD ////////////////
+		/////////////////////////////////////
+		$cmdChangeColor = $this->getCmd(null, 'change::color');
+		if (is_object($cmdChangeColor)) $replace['#change::color::cmd#'] = $cmdChangeColor->getId();
 		////////////////////////
 		log::add(__CLASS__, 'debug', '└────────────────────');
 		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'eqLogic', __CLASS__)));
@@ -780,16 +798,57 @@ class powerFlowCmd extends cmd
 	/*     * *********************Methode d'instance************************* */
 
 	/**
+	 * This method is called when a command is called in the toHtml() function
+	 */
+	public function getWidgetTemplateCode($_version = 'dashboard', $_clean = true, $_widgetName = '') {
+		$data = null;
+		if ($_version == 'scenario' && $this->getLogicalId() == 'change::color') {
+			log::add('powerFlow', 'debug', $this->getHumanName() . ' --> getWidgetTemplateCode : request template for logicalId change::color');
+			$replace = array(
+				'#title_placeholder#' => __('Catégorie', __FILE__),
+				'#message_placeholder#' => __('Couleur', __FILE__),
+				'#inverter#' => __('Onduleur', __FILE__),
+				'#inverterTextInColor#' => __('texte interieur', __FILE__),
+				'#grid#' => __('Réseau', __FILE__),
+				'#buy#' => __('achat', __FILE__),
+				'#sell#' => __('vente', __FILE__),
+				'#solar#' => __('Solaire', __FILE__),
+				'#battery#' => __('Batterie', __FILE__),
+				'#battery_charge#' => __('Batterie charge', __FILE__),
+				'#battery_discharge#' => __('Batterie décharge', __FILE__),
+				'#battery_mppt#' => __('Batterie mppt', __FILE__),
+				'#load#' => __('Récepteurs', __FILE__),
+				'#aux#' => __('Générateur', __FILE__),
+				'#none#' => __('Aucun', __FILE__)
+            );
+			$data = getTemplate('core', 'scenario', 'cmd.action.message.change_color', 'powerFlow');
+            $template = template_replace($replace, $data);
+			return array('template' => $template, 'isCoreWidget' => false);
+		}
+		return parent::getWidgetTemplateCode($_version, $_clean, $_widgetName);
+	}
+
+	/**
 	 * This method is called when a command is executed
 	 */
-	public function execute($_options = array())
-	{
+	public function execute($_options = array()) {
 		if ($this->getType() != 'action') {
 			return;
 		}
 		$eqLogic = $this->getEqLogic();
 		if ($this->getLogicalId() == 'refresh') {
 			//$eqLogic->refreshStatus();
+		} else if ($this->getLogicalId() == 'change::color') {
+			if (is_object($eqLogic)) {
+				if (isset($_options['title']) && $_options['title'] != '' && isset($_options['color']) && $_options['color'] != '') {
+					if ($eqLogic->getConfiguration($_options['title'] . '::color', 'null') != 'null') {
+						$eqLogic->setConfiguration($_options['title'] . '::color', $_options['color']);
+						$eqLogic->save();
+						log::add('powerFlow', 'debug', $eqLogic->getHumanName(). ' --> change::color with options : ' . json_encode($_options));
+						event::add('cmd::update', array('cmd_id' => $this->getId(), 'event' => $_options['title'] . '::color', 'color' => $_options['color']));
+					}
+				}
+			}
 		}
 	}
 
