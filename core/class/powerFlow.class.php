@@ -819,10 +819,11 @@ class powerFlowCmd extends cmd
 				'#battery_mppt#' => __('Batterie mppt', __FILE__),
 				'#load#' => __('Récepteurs', __FILE__),
 				'#aux#' => __('Générateur', __FILE__),
-				'#none#' => __('Aucun', __FILE__)
-            );
+				'#none#' => __('Aucun', __FILE__),
+                '#uid#' => 'cmd' . $this->getId() . eqLogic::UIDDELIMITER . mt_rand() . eqLogic::UIDDELIMITER
+			);
 			$data = getTemplate('core', 'scenario', 'cmd.action.message.change_color', 'powerFlow');
-            $template = template_replace($replace, $data);
+			$template = template_replace($replace, $data);
 			return array('template' => $template, 'isCoreWidget' => false);
 		}
 		return parent::getWidgetTemplateCode($_version, $_clean, $_widgetName);
