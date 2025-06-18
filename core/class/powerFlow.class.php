@@ -820,7 +820,7 @@ class powerFlowCmd extends cmd
 				'#load#' => __('Récepteurs', __FILE__),
 				'#aux#' => __('Générateur', __FILE__),
 				'#none#' => __('Aucun', __FILE__),
-                '#uid#' => 'cmd' . $this->getId() . eqLogic::UIDDELIMITER . mt_rand() . eqLogic::UIDDELIMITER
+				'#uid#' => 'cmd' . $this->getId() . eqLogic::UIDDELIMITER . mt_rand() . eqLogic::UIDDELIMITER
 			);
 			$data = getTemplate('core', 'scenario', 'cmd.action.message.change_color', 'powerFlow');
 			$template = template_replace($replace, $data);
