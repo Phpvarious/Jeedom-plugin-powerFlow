@@ -535,7 +535,7 @@
         success:  function(cmd) {
           config#uid#.grid.isHistorized = cmd.isHistorized
           config#uid#.grid.id = cmd.id
-          config#uid#.grid.power_unit = cmd.unite
+          config#uid#.grid.power_unit = cmd.unite.trim()
           jeedom.cmd.execute({
             id: cmd.id,
             async: false,
@@ -687,7 +687,7 @@
         success:  function(cmd) {
           config#uid#.battery.power.isHistorized = cmd.isHistorized
           config#uid#.battery.power.id = cmd.id
-          config#uid#.battery.power.unit = cmd.unite
+          config#uid#.battery.power.unit = cmd.unite.trim()
           jeedom.cmd.execute({
             id: cmd.id,
             async: false,
@@ -915,7 +915,7 @@
           config#uid#.battery.mppt.power.show = true
           config#uid#.battery.mppt.power.isHistorized = cmd.isHistorized
           config#uid#.battery.mppt.power.id = cmd.id
-          config#uid#.battery.mppt.power.unit = cmd.unite
+          config#uid#.battery.mppt.power.unit = cmd.unite.trim()
           jeedom.cmd.execute({
             id: cmd.id,
             async: false,
@@ -994,7 +994,7 @@
         success:  function(cmd) {
           config#uid#.solar.isHistorized = cmd.isHistorized
           config#uid#.solar.id = cmd.id
-          config#uid#.solar.power_unit = cmd.unite
+          config#uid#.solar.power_unit = cmd.unite.trim()
           jeedom.cmd.execute({
             id: cmd.id,
             async: false,
@@ -1097,7 +1097,7 @@
             id: parseInt(obj[j][key]),
             async: false,
             success:  function(cmd) {
-              config#uid#.solars[j][type[0] + '_unit'] = cmd.unite
+              config#uid#.solars[j][type[0] + '_unit'] = cmd.unite.trim()
               config#uid#.solars[j][type[0] + '_isHistorized'] = cmd.isHistorized
               config#uid#.solars[j][type[0] + '_id'] = cmd.id
               jeedom.cmd.execute({
@@ -1225,7 +1225,7 @@
         success:  function(cmd) {
           config#uid#.load.isHistorized = cmd.isHistorized
           config#uid#.load.id = cmd.id
-          config#uid#.load.power_unit = cmd.unite
+          config#uid#.load.power_unit = cmd.unite.trim()
           jeedom.cmd.execute({
             id: cmd.id,
             async: false,
@@ -1339,7 +1339,7 @@
             id: parseInt(obj[j][key]),
             async: false,
             success:  function(cmd) {
-              config#uid#.loads[j][type[0] + '_unit'] = cmd.unite
+              config#uid#.loads[j][type[0] + '_unit'] = cmd.unite.trim()
               config#uid#.loads[j][type[0] + '_isHistorized'] = cmd.isHistorized
               config#uid#.loads[j][type[0] + '_id'] = cmd.id
               jeedom.cmd.execute({
@@ -1597,7 +1597,7 @@
         success:  function(cmd) {
           config#uid#.aux.isHistorized = cmd.isHistorized
           config#uid#.aux.id = cmd.id
-          config#uid#.aux.power_unit = cmd.unite
+          config#uid#.aux.power_unit = cmd.unite.trim()
           jeedom.cmd.execute({
             id: cmd.id,
             async: false,
