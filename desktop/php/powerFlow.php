@@ -803,7 +803,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{Capacité}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{Capacité de la batterie.}}"></i></sup>
+													{{Capacité}} <sub>(Wh)</sub> <sup><i class="fas fa-question-circle" title="{{Capacité de la batterie.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery::power::capacity">
 												<span class="input-group-btn">
