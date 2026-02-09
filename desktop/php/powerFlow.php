@@ -191,7 +191,6 @@ $eqLogics = eqLogic::byType('powerFlow');
 								<div class="col-sm-2">
 									<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="background::activate">{{Activer}}</label>
 								</div>
-
 								<div class="col-lg-2">
 									<input type="color" class="eqLogicAttr form-control input-sm" value="#000000" data-l1key="configuration" data-l2key="background::color" />
 								</div>
@@ -230,7 +229,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- INVERTER CONFIGURATION -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Configuration}}</h3>
+							<h3 class="panel-title"><i class="fas fa-cogs"></i> {{Configuration}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -245,17 +244,6 @@ $eqLogics = eqLogic::byType('powerFlow');
 												</span>
 											</div>
 										</div>
-										<div class="col-lg-3">
-											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">{{Couleur texte intérieur}}</span>
-												<input type="color" class="eqLogicAttr form-control" value="#000000" data-l1key="configuration" data-l2key="inverter::text::in::color" />
-												<span class="input-group-btn">
-													<a class="btn btn-default restoreDefaut roundedRight" data-type="inverter::text::in::color" data-defaut="#000000" title="{{Couleur par défaut}}"><i class="fas fa-eraser"></i></a>
-												</span>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft input-group-addon" style="min-width: 125px;">
@@ -285,7 +273,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- INVERTER OTHER -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Autres}}</h3>
+							<h3 class="panel-title"><i class="fas fa-wrench"></i> {{Autres}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -296,10 +284,19 @@ $eqLogics = eqLogic::byType('powerFlow');
 										</div>
 										<div class="col-lg-4">
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">{{Tension}} </span>
+												<span class="input-group-addon roundedLeft" style="min-width: 125px;">{{Tension}} <sub>(1)</sub></span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="inverter::voltage::cmd">
 												<span class="input-group-btn">
 													<a class="btn btn-default listCmdInfo roundedRight" data-type="inverter::voltage::cmd" data-subtype="numeric"><i class="fas fa-list-alt"></i></a>
+												</span>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="input-group">
+												<span class="input-group-addon roundedLeft" style="min-width: 125px;"><sub>(1)</sub> {{Couleur texte}}</span>
+												<input type="color" class="eqLogicAttr form-control" value="#000000" data-l1key="configuration" data-l2key="inverter::text::in::color" />
+												<span class="input-group-btn">
+													<a class="btn btn-default restoreDefaut roundedRight" data-type="inverter::text::in::color" data-defaut="#000000" title="{{Couleur par défaut}}"><i class="fas fa-eraser"></i></a>
 												</span>
 											</div>
 										</div>
@@ -310,7 +307,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										</div>
 										<div class="col-lg-4">
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">{{Fréquence}} </span>
+												<span class="input-group-addon roundedLeft" style="min-width: 125px;">{{Fréquence}} <sub>(1)</sub></span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="inverter::frequency::cmd">
 												<span class="input-group-btn">
 													<a class="btn btn-default listCmdInfo roundedRight" data-type="inverter::frequency::cmd" data-subtype="numeric"><i class="fas fa-list-alt"></i></a>
@@ -324,7 +321,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										</div>
 										<div class="col-lg-4">
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">{{Intensité}} </span>
+												<span class="input-group-addon roundedLeft" style="min-width: 125px;">{{Intensité}} <sub>(1)</sub></span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="inverter::current::cmd">
 												<span class="input-group-btn">
 													<a class="btn btn-default listCmdInfo roundedRight" data-type="inverter::current::cmd" data-subtype="numeric"><i class="fas fa-list-alt"></i></a>
@@ -355,7 +352,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- TEMP -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Températures}}</h3>
+							<h3 class="panel-title"><i class="icon jeedomapp-temperature"></i> {{Températures}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -412,7 +409,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- GRID CONFIGURATION -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Configuration}}</h3>
+							<h3 class="panel-title"><i class="fas fa-cogs"></i> {{Configuration}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -570,7 +567,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- GRID POWER OUTAGE -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Panne de courant}}</h3>
+							<h3 class="panel-title"><i class="icon mdi-power-plug-off"></i> {{Panne de courant}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -621,7 +618,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- SOLAR CONFIGURATION -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> Configuration</h3>
+							<h3 class="panel-title"><i class="fas fa-cogs"></i> Configuration</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -783,7 +780,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- BATTERY CONFIGURATION -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Configuration}}</h3>
+							<h3 class="panel-title"><i class="fas fa-cogs"></i> {{Configuration}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -935,6 +932,9 @@ $eqLogics = eqLogic::byType('powerFlow');
 												</span>
 											</div>
 										</div>
+										<div class="col-lg-10">
+											<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="battery::mppt::power::calcul">{{Prendre en compte la puissance du mppt dans le calcul du temps de charge/décharge}}</label>
+										</div>
 									</div>
 								</fieldset>
 							</form>
@@ -1015,7 +1015,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- BATTERY OTHER -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Autres}}</h3>
+							<h3 class="panel-title"><i class="fas fa-wrench"></i> {{Autres}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -1076,7 +1076,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- BATTERY STATE -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{État de charge}}</h3>
+							<h3 class="panel-title"><i class="fas fa-battery-half"></i> {{État de charge}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -1100,7 +1100,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{SOC Min.}} <sub>(%)</sub> <sup><i class="fas fa-question-circle" title="{{Pourcentage auquel la batterie passe à l'arrêt.}}"></i></sup>
+													{{SOC Shutdown.}} <sub>(%)</sub> <sup><i class="fas fa-question-circle" title="{{Pourcentage auquel la batterie passe à l'arrêt.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery::soc::shutdown">
 												<span class="input-group-btn">
@@ -1131,6 +1131,32 @@ $eqLogics = eqLogic::byType('powerFlow');
 										{{Couleur personnalisée de l'icône batterie en fonction de la charge restante.}}<br>
 										<i class="fas fa-exclamation-triangle"></i> {{Attention : cette fonctionnalité sera désactivée si vous utilisez une icône perso ou une icône intégrée.}}
 									</div>
+									<!--
+									<div class="form-group">
+										<div class="col-lg-3">
+											<div class="input-group">
+												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
+													{{SOC Min.}} <sub>(%)</sub> <sup><i class="fas fa-question-circle" title="{{Pourcentage auquel la batterie est considérée vide.}}"></i></sup>
+												</span>
+												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery::soc::empty">
+												<span class="input-group-btn">
+													<a class="btn btn-default cursor bt_selectDataStore roundedRight" data-type="battery::soc::empty" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>
+												</span>
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="input-group">
+												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
+													{{SOC Max.}} <sub>(%)</sub> <sup><i class="fas fa-question-circle" title="{{Pourcentage auquel la batterie est considérée pleine.}}"></i></sup>
+												</span>
+												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery::soc::full">
+												<span class="input-group-btn">
+													<a class="btn btn-default cursor bt_selectDataStore roundedRight" data-type="battery::soc::full" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>
+												</span>
+											</div>
+										</div>
+									</div>
+									-->
 									<div class="form-group">
 										<div class="col-lg-1">
 											<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="battery::color::state::desactivate">{{Désactiver}}</label>
@@ -1139,35 +1165,35 @@ $eqLogics = eqLogic::byType('powerFlow');
 									<div class="form-group">
 										<div class="col-lg-4">
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">% = 0</span>
+												<span class="input-group-addon roundedLeft" style="min-width: 145px;"> % < 25 </span><!-- % <= SOC Min -->
 												<input type="color" class="eqLogicAttr form-control" value="#ff0000" data-l1key="configuration" data-l2key="battery::color::state::0" />
 												<span class="input-group-btn">
 													<a class="btn btn-default restoreDefaut roundedRight" data-type="battery::color::state::0" data-defaut="#ff0000" title="{{Couleur par défaut}}"><i class="fas fa-eraser"></i></a>
 												</span>
 											</div>
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">0 < % < 50</span>
+												<span class="input-group-addon roundedLeft" style="min-width: 145px;"> 25 <= % < 50 </span><!-- SOC Min < % < 50 -->
 												<input type="color" class="eqLogicAttr form-control" value="#ff4005" data-l1key="configuration" data-l2key="battery::color::state::25" />
 												<span class="input-group-btn">
 													<a class="btn btn-default restoreDefaut roundedRight" data-type="battery::color::state::25" data-defaut="#ff4005" title="{{Couleur par défaut}}"><i class="fas fa-eraser"></i></a>
 												</span>
 											</div>
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">50 <= % < 75</span>
+												<span class="input-group-addon roundedLeft" style="min-width: 145px;">50 <= % < 75</span>
 												<input type="color" class="eqLogicAttr form-control" value="#ffa500" data-l1key="configuration" data-l2key="battery::color::state::50" />
 												<span class="input-group-btn">
 													<a class="btn btn-default restoreDefaut roundedRight" data-type="battery::color::state::50" data-defaut="#ffa500" title="{{Couleur par défaut}}"><i class="fas fa-eraser"></i></a>
 												</span>
 											</div>
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">75 <= % < 100</span>
+												<span class="input-group-addon roundedLeft" style="min-width: 145px;">75 <= % < 100</span><!-- 75 <= % < SOC Max -->
 												<input type="color" class="eqLogicAttr form-control" value="#9ACD32" data-l1key="configuration" data-l2key="battery::color::state::75" />
 												<span class="input-group-btn">
 													<a class="btn btn-default restoreDefaut roundedRight" data-type="battery::color::state::75" data-defaut="#9ACD32" title="{{Couleur par défaut}}"><i class="fas fa-eraser"></i></a>
 												</span>
 											</div>
 											<div class="input-group">
-												<span class="input-group-addon roundedLeft" style="min-width: 125px;">% = 100</span>
+												<span class="input-group-addon roundedLeft" style="min-width: 145px;">% >= 100</span><!-- % >= SOC Max -->
 												<input type="color" class="eqLogicAttr form-control" value="#008000" data-l1key="configuration" data-l2key="battery::color::state::100" />
 												<span class="input-group-btn">
 													<a class="btn btn-default restoreDefaut roundedRight" data-type="battery::color::state::100" data-defaut="#008000" title="{{Couleur par défaut}}"><i class="fas fa-eraser"></i></a>
@@ -1194,7 +1220,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- LOAD CONFIGURATION -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Configuration}}</h3>
+							<h3 class="panel-title"><i class="fas fa-cogs"></i> {{Configuration}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -1304,7 +1330,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- Loads -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fa-solar-panel"></i> {{Récepteurs}}</h3>
+							<h3 class="panel-title"><i class="fas fa-plug"></i> {{Récepteurs}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -1351,7 +1377,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- GENERATOR CONFIGURATION -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Configuration}}</h3>
+							<h3 class="panel-title"><i class="fas fa-cogs"></i> {{Configuration}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -1468,7 +1494,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 					<!-- Perso CONFIGURATION -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fas fas fa-bolt"></i> {{Perso}}</h3>
+							<h3 class="panel-title"><i class="fas fa-cogs"></i> {{Perso}}</h3>
 						</div>
 						<div class="panel-body">
 							<form class="form-horizontal">
