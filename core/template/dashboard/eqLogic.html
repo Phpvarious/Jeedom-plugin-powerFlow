@@ -189,32 +189,32 @@
         if (value < 0) val = -val
         return Array(val, div);
       }
-    function getBatteryIcon#uid#(value=false, full_capacity=80, empty_capacity=30, icon_perso=false) {
-      log#uid#('| getBatteryIcon() -> ' + value + ' | ' + full_capacity + ' | ' + empty_capacity + ' | ' + icon_perso)
-      let available = full_capacity - empty_capacity
-      let value_pourcent = Math.trunc(value * available / 100)
-      if (value_pourcent <= 0) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-0"/>';
-      else if (value_pourcent < 50) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-25"/>';
-      else if (value_pourcent < 75) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-50"/>';
-      else if (value_pourcent < 100) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-75"/>';
-      else return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-100"/>';
-    }
-    
-    function numIsPair(n) {
-      return (n & 1) ? false : true;
-    }
-    
-    function formatMillier(nombre, active=false) {
-      if (!active) return nombre;
-      //return Intl.NumberFormat().format(nombre);
-      nombre += '';
-      var sep = ' ';
-      var reg = /(\d+)(\d{3})/;
-      while( reg.test( nombre)) {
-        nombre = nombre.replace( reg, '$1' +sep +'$2');
+      function getBatteryIcon#uid#(value = 100) { // , full_capacity = 100, empty_capacity = 0
+        log#uid#('| getBatteryIcon() -> ' + value + '%') // + ' | full : ' + full_capacity + ' % | empty : ' + empty_capacity + ' %'
+        //let available = full_capacity - empty_capacity
+        //let value_pourcent = Math.trunc(value * available / 100)
+        if (value < 25) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-0"/>'; // value_pourcent
+        else if (value < 50) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-25"/>'; // value_pourcent
+        else if (value < 75) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-50"/>'; // value_pourcent
+        else if (value < 100) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-75"/>'; // value_pourcent
+        else return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-100"/>';
       }
-      return nombre;
-    }
+    
+      function numIsPair(n) {
+        return (n & 1) ? false : true;
+      }
+    
+      function formatMillier(nombre, active=false) {
+        if (!active) return nombre;
+        //return Intl.NumberFormat().format(nombre);
+        nombre += '';
+        var sep = ' ';
+        var reg = /(\d+)(\d{3})/;
+        while( reg.test( nombre)) {
+          nombre = nombre.replace( reg, '$1' +sep +'$2');
+        }
+        return nombre;
+      }
     ////////////////////////////////////////////////////////
     //////////////////////// CONFIG ////////////////////////
     ////////////////////////////////////////////////////////
@@ -336,6 +336,7 @@
             unit: 'W',
             isHistorized:0,
             id: false,
+            useForCalcul: false,
           },
           energy: {
             show: false,
@@ -365,7 +366,6 @@
         power: 0,
         power_unit: '',
         has_pv_power: false,
-        animate_solar_enable: true, // TODO
         mppts: 0,
         isHistorized:0,
         id: false,
@@ -498,9 +498,12 @@
     if (is_numeric('#batteryAlertPower#')) config#uid#.battery.alert_power = '#batteryAlertPower#'
     if (is_numeric('#batteryCapacity#')) config#uid#.battery.capacity = '#batteryCapacity#'
     if (is_numeric('#batterySocShutdown#')) config#uid#.battery.soc.shutdown = '#batterySocShutdown#'
+    //if (is_numeric('#batteryEmptyCapacity#')) config#uid#.battery.empty_capacity = '#batteryEmptyCapacity#' // Todo
+    //if (is_numeric('#batteryFullCapacity#')) config#uid#.battery.full_capacity = '#batteryFullCapacity#' // Todo
     if ("#mpptName#" != '#'+'mpptName#') config#uid#.battery.mppt.name = "#mpptName#"
     if (is_numeric('#batteryMpptMaxPower#')) config#uid#.battery.mppt.max_power = '#batteryMpptMaxPower#'
     if (is_numeric('#batteryMpptAlertPower#')) config#uid#.battery.mppt.alert_power = '#batteryMpptAlertPower#'
+    if ("#batteryMpptPowerUseForCalcul#" == '1') config#uid#.battery.mppt.power.useForCalcul = true
     if ("#batteryColor#" != '#'+'batteryColor#') document.documentElement.style.setProperty('--battery-color-#uid#', '#batteryColor#')
     if ("#batteryStateColor#" != '#'+'batteryStateColor#') document.documentElement.style.setProperty('--battery-state#uid#', '#batteryStateColor#') // TODO
     if ("#batteryChargeColor#" != '#'+'batteryChargeColor#') document.documentElement.style.setProperty('--battery-charge-color-#uid#', '#batteryChargeColor#')
@@ -522,7 +525,7 @@
     if (is_numeric('#auxMaxPower#')) config#uid#.aux.max_power = '#auxMaxPower#'
     if (is_numeric('#auxAlertPower#')) config#uid#.aux.alert_power = '#auxAlertPower#'
     if ("#dailyAuxText#" != '#'+'dailyAuxText#') config#uid#.aux.daily.text = "#dailyAuxText#"
-      
+
     ////////////////////////////////////////////////////////
     //////////////////////// GRID //////////////////////////
     ////////////////////////////////////////////////////////
@@ -1674,7 +1677,7 @@
     ////////////////////////////////////////////////////////
     //////////////////////// PERSO /////////////////////////
     ////////////////////////////////////////////////////////
-    if ('#persoarray#' != '#' + 'persoarray#') {
+    if ('#hasPerso#' == '1') {
       var obj = JSON.parse(JSON.stringify(#persoarray#))
       for (j in obj) {
         let cmd = obj[j]['perso::cmd']
@@ -2680,10 +2683,10 @@
             ///////////////
             html += '<text id="battery-duration-#uid#" fill="' + ((config#uid#.battery.capacity == 0) ? 'transparent' : 'var(--battery-color-#uid#)') + '" x="'
             html += (config#uid#.has_aux) ? '171' : '270'
-            html += '" y="377.5" class="ft12-#uid# left-align#uid#"></text>'
+            html += '" y="393.7" class="ft12-#uid# left-align#uid#"></text>'
             html += '<text id="battery-duration-text-#uid#" fill="' + ((config#uid#.battery.capacity == 0 || config#uid#.battery.power.state === 0) ? 'transparent' : 'var(--battery-color-#uid#)') + '" x="'
             html += (config#uid#.has_aux) ? '171' : '270'
-            html += '" y="393.7" class="ft9-#uid# left-align#uid#"></text>'
+            html += '" y="377.5" class="ft9-#uid# left-align#uid#"></text>'
             ///////////////
             /// STATE % ///
             ///////////////
@@ -3277,23 +3280,23 @@
       if (config#uid#.has_load && el != 'init' && config#uid#.activateGaugeRatio) calculateGaugeRatio#uid#('calculateAux')
     }
     
-    function calculateBattery#uid#(el='') {
+    function calculateBattery#uid#(el = '') {
       log#uid#('┌─────────────────── Widget Distribution Onduleur [#uid#] en debug [calculateBattery()] ───────────────')
+      if (el != '') log#uid#('| launched by ' + el)
       var ElDomExist = !!document.getElementById("widget#uid#")
       log#uid#('| ElDomExist ? ' + ElDomExist)
       if (ElDomExist) {
-        if (el != '') log#uid#('| launched by ' + el)
-        if (el == 'init' || el == 'battery state'){
+        if (el == 'init' || el == 'battery state') {
           ///  ICON  \\\
           if (!config#uid#.battery.icon) {
-            document.getElementById("battery-icon-#uid#").innerHTML = getBatteryIcon#uid#(config#uid#.battery.state.state, config#uid#.battery.full_capacity, config#uid#.battery.empty_capacity)
+            document.getElementById("battery-icon-#uid#").innerHTML = getBatteryIcon#uid#(config#uid#.battery.state.state) //, config#uid#.battery.full_capacity, config#uid#.battery.empty_capacity
             if (config#uid#.battery.autoColorBattery) {
               ///  set color icon & state  \\\
               let color_battery = 'var(--battery-color-#uid#)'
-              if (config#uid#.battery.state.state <= 0) color_battery = 'var(--battery-state-0-#uid#)'
+              if (config#uid#.battery.state.state < 25) color_battery = 'var(--battery-state-0-#uid#)' //config#uid#.battery.empty_capacity
               else if (config#uid#.battery.state.state < 50) color_battery = 'var(--battery-state-25-#uid#)'
               else if (config#uid#.battery.state.state < 75) color_battery = 'var(--battery-state-50-#uid#)'
-              else if (config#uid#.battery.state.state < 100) color_battery = 'var(--battery-state-75-#uid#)'
+              else if (config#uid#.battery.state.state < 100) color_battery = 'var(--battery-state-75-#uid#)' //config#uid#.battery.full_capacity
               else color_battery = 'var(--battery-state-100-#uid#)'
               document.getElementById("battery-icon-#uid#").style.color = color_battery
               document.getElementById("battery-soc-#uid#")?.setAttribute("fill", color_battery)
@@ -3301,9 +3304,8 @@
           }
           if (config#uid#.battery.state.show) document.getElementById("battery-soc-#uid#").innerHTML = trunc#uid#(config#uid#.battery.state.state, 1) + '%'
         }
+        
         if (el == 'init' || el == 'battery power' || el == 'battery mppt power') {
-          let totalFromInverter = (config#uid#.battery.power.state < 0) ? Math.min(config#uid#.battery.power.state + config#uid#.battery.mppt.power.state, 0) : config#uid#.battery.power.state
-          log#uid#('| totalFromInverter : ' + totalFromInverter)
           let color = 'var(--battery-color-#uid#)'
           
           ///  GAUGE POWER  \\\
@@ -3318,6 +3320,7 @@
               }
             }
           }
+          
           ///  GAUGE MPPT  \\\
           if (el != 'battery power') {
             if (config#uid#.battery.mppt.max_power) {
@@ -3332,17 +3335,15 @@
           }
           
           ///  DOT  \\\
-          if (parseFloat(totalFromInverter) > 0) {
+          if (config#uid#.battery.power.state > 0) {
             document.getElementById("battery-dot-charge-#uid#")?.setAttribute("fill", "transparent")
-            document.getElementById("battery-dot-discharge-#uid#")?.setAttribute("fill", "var(--battery-discharge-color-#uid#)") //--battery-color-#uid#
+            document.getElementById("battery-dot-discharge-#uid#")?.setAttribute("fill", "var(--battery-discharge-color-#uid#)")
             color = 'var(--battery-discharge-color-#uid#)'
-          }
-          else if (parseFloat(totalFromInverter) < 0) {
-            document.getElementById("battery-dot-charge-#uid#")?.setAttribute("fill", "var(--battery-charge-color-#uid#)") //--battery-color-#uid#
+          } else if (config#uid#.battery.power.state < 0) {
+            document.getElementById("battery-dot-charge-#uid#")?.setAttribute("fill", "var(--battery-charge-color-#uid#)")
             document.getElementById("battery-dot-discharge-#uid#")?.setAttribute("fill", "transparent")
             color = 'var(--battery-charge-color-#uid#)'
-          }
-          else {
+          } else {
             document.getElementById("battery-dot-charge-#uid#")?.setAttribute("fill", "transparent")
             document.getElementById("battery-dot-discharge-#uid#")?.setAttribute("fill", "transparent")
           }
@@ -3390,10 +3391,11 @@
               //if (config#uid#.font_alert) document.getElementById("battery-mppt-power-#uid#")?.classList.remove("blink#uid#")
             }
           }
+          
           ///  SPEED  \\\
           log#uid#('| animation_speed = ' + config#uid#.battery.animation_speed)
           log#uid#('| max_power = ' + config#uid#.battery.max_power)
-          let speed = config#uid#.battery.animation_speed - ((config#uid#.battery.animation_speed - 1.5) * Math.abs(totalFromInverter) / (config#uid#.battery.max_power || Math.abs(totalFromInverter)))
+          let speed = config#uid#.battery.animation_speed - ((config#uid#.battery.animation_speed - 1.5) * Math.abs(config#uid#.battery.power.state) / (config#uid#.battery.max_power || Math.abs(config#uid#.battery.power.state)))
           speed = (speed >= 1.5) ? speed : 1.5
           log#uid#('| animation_speed = ' + speed)
           document.getElementById("battery-anim-charge-#uid#")?.setAttribute("dur",speed)
@@ -3401,60 +3403,53 @@
           
           if (config#uid#.has_load && el != 'init' && config#uid#.activateGaugeRatio) calculateGaugeRatio#uid#('calculateBattery')
         }
+        
         ///  Battery capacity  \\\
         log#uid#('| ----------- battery_capacity & time --------------')
-        let battery_capacity = 0
-        log#uid#('| config#uid#.battery.state.state = ' + config#uid#.battery.state.state)
+        log#uid#('| battery.power.state = ' + config#uid#.battery.power.state)
+        log#uid#('| battery.mppt.power.state = ' + config#uid#.battery.mppt.power.state)
         
-        //calculate remaining battery time to charge or discharge
-        let totalSeconds = 0
-        let formattedResultTime = ""
-        let duration = ""
+        /// Calculate remaining battery time to charge or discharge  \\\
         if (config#uid#.battery.capacity !== false && config#uid#.battery.capacity > 0) {
-          if (config#uid#.battery.power.state == 0) {
-            log#uid#('| power.state == 0')
-            totalSeconds = (((parseInt(config#uid#.battery.state.state) - config#uid#.battery.soc.shutdown) / 100) * config#uid#.battery.capacity) / 1 * 60 * 60
-          } else if (config#uid#.battery.power.state > 0) { // Décharge
-            log#uid#('| power.state > 0')
-            totalSeconds = (((config#uid#.battery.state.state - config#uid#.battery.soc.shutdown) / 100) * config#uid#.battery.capacity) / config#uid#.battery.power.state * 60 * 60
-            log#uid#('| energie restante = ' + ((config#uid#.battery.state.state - config#uid#.battery.soc.shutdown) / 100) * config#uid#.battery.capacity)
-          } else if (config#uid#.battery.power.state < 0) { // Charge
-            log#uid#('| power.state < 0')
-            totalSeconds = ((((config#uid#.battery.full_capacity - config#uid#.battery.state.state) / 100) * config#uid#.battery.capacity) / config#uid#.battery.power.state) * 60 * 60 * -1
-            log#uid#('| energie restante = ' + ((config#uid#.battery.full_capacity - config#uid#.battery.state.state) / 100) * config#uid#.battery.capacity)
+          let totalBattery = (config#uid#.battery.mppt.power.useForCalcul == true) ? config#uid#.battery.power.state - config#uid#.battery.mppt.power.state : config#uid#.battery.power.state
+          log#uid#('| totalBattery : ' + totalBattery)
+          let totalSeconds = 0
+          let formattedResultTime = ""
+          let duration = ""
+          if (totalBattery > 0) {  // Décharge
+            totalSeconds = (((config#uid#.battery.state.state - config#uid#.battery.soc.shutdown) / 100) * config#uid#.battery.capacity) / totalBattery * 60 * 60  //PR 07/02
+          } else if (totalBattery < 0) { // Charge
+            totalSeconds = ((((config#uid#.battery.full_capacity - config#uid#.battery.state.state) / 100) * config#uid#.battery.capacity) / totalBattery) * 60 * 60 * -1 //PR 07/02
           }
+          totalSeconds = Math.max(totalSeconds, 0)
           log#uid#('| totalSeconds = ' + totalSeconds)
-          const currentTime = new Date() // Create a new Date object representing the current time
-          const durationMilliseconds = totalSeconds * 1000 // Convert the duration to milliseconds
-          const resultTime = new Date(currentTime.getTime() + durationMilliseconds) // Add the duration in milliseconds
-          const resultHours = resultTime.getHours() // Get the hours component of the resulting time
-          const resultMinutes = resultTime.getMinutes() // Get the minutes component of the resulting time
-          const formattedMinutes = resultMinutes.toString().padStart(2, "0")
-          const formattedHours = resultHours.toString().padStart(2, "0")
-          formattedResultTime = formattedHours + 'h' + formattedMinutes
-          log#uid#('| formatted = ' + formattedResultTime)
-          const days = Math.floor(totalSeconds / (60 * 60 * 24))
-          const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60))
-          const minutes = Math.floor((totalSeconds % (60 * 60)) / 60)
-          if (days > 0) {
-            duration += days
-            duration += (hours <= 1) ? ' jour, ' : ' jours, '
-          }
-          if (hours > 0 || days > 0) {
-            duration += hours
-            duration += (hours <= 1) ? ' hr, ' : ' hrs, '
-          }
-          duration +=  minutes + ' min'
-          log#uid#('| duration= ' + duration)
-          if (config#uid#.battery.power.state == 0 || duration == '0 min') { // || config#uid#.battery.power.state == '0'
+          
+          if (totalSeconds == 0) {
             document.getElementById("battery-duration-#uid#").innerHTML = ''
             document.getElementById("battery-duration-text-#uid#").innerHTML = ''
           } else {
+            const currentTime = new Date() // Create a new Date object representing the current time
+            const durationMilliseconds = totalSeconds * 1000 // Convert the duration to milliseconds
+            const resultTime = new Date(currentTime.getTime() + durationMilliseconds) // Add the duration in milliseconds
+            const resultHours = resultTime.getHours() // Get the hours component of the resulting time
+            const resultMinutes = resultTime.getMinutes() // Get the minutes component of the resulting time
+            const formattedMinutes = resultMinutes.toString().padStart(2, "0")
+            const formattedHours = resultHours.toString().padStart(2, "0")
+            formattedResultTime = formattedHours + 'h' + formattedMinutes
+            log#uid#('| formatted = ' + formattedResultTime)
+            const days = Math.floor(totalSeconds / (60 * 60 * 24))
+            const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60))
+            const minutes = Math.floor((totalSeconds % (60 * 60)) / 60)
+            if (days > 0) duration += days + ((days == 1) ? ' jour, ' : ' jours, ')
+            if (hours > 0 || days > 0) duration += hours + ((hours <= 1) ? ' hr, ' : ' hrs, ')
+            duration +=  minutes + ' min'
+            log#uid#('| duration = ' + duration)
             document.getElementById("battery-duration-#uid#").innerHTML = duration
-            if (config#uid#.battery.power.state <= 0) document.getElementById("battery-duration-text-#uid#").innerHTML = 'CHARGE ' + config#uid#.battery.full_capacity + '% À ' + formattedResultTime
-            if (config#uid#.battery.power.state >= 0) document.getElementById("battery-duration-text-#uid#").innerHTML = 'DÉCHARGE : ' + config#uid#.battery.soc.shutdown + '% À ' + formattedResultTime
+            if (totalBattery <= 0) document.getElementById("battery-duration-text-#uid#").innerHTML = 'CHARGE ' + config#uid#.battery.full_capacity + '% (' + formattedResultTime + ') DANS'
+            else if (totalBattery >= 0) document.getElementById("battery-duration-text-#uid#").innerHTML = 'DÉCHARGE : ' + config#uid#.battery.soc.shutdown + '% ( ' + formattedResultTime + ') DANS'
           }
-          if(timer_in#uid# === false) {
+          
+          if (timer_in#uid# === false) {
             log#uid#('| initialisation de la tempo')
             timer_in#uid# = setInterval(calculateBattery#uid#, 60000, 'timer_in')
           } else {
@@ -3464,6 +3459,9 @@
             timer_in#uid# = setInterval(calculateBattery#uid#, 60000, 'timer_in')
           }
         }
+      } else if (el == 'timer_in') {
+        clearInterval(timer_in#uid#)
+        timer_in#uid# === false
       } // ElDomExist
       log#uid#('└──────────────────────────────────────────────────────')
     }
@@ -3574,13 +3572,18 @@
         
         //let loadFromSolar = Math.max((config#uid#.solar.power - Math.abs(Math.min(config#uid#.battery.power.state, 0)) - Math.abs(Math.min(config#uid#.grid.power, 0))), 0)
         let loadFromSolar = Math.max((config#uid#.solar.power - Math.abs(Math.min(config#uid#.battery.power.state, 0)) + Math.abs(config#uid#.battery.mppt.power.state) - Math.abs(Math.min(config#uid#.grid.power, 0))), 0)
-        
         let loadFromBattery = Math.max(config#uid#.battery.power.state, 0)
         let loadFromAux = config#uid#.aux.power
         let loadFromGridTemp = Math.max((config#uid#.load.power - loadFromSolar - loadFromBattery - loadFromAux), 0)
         let loadFromGrid = Math.min(loadFromGridTemp, Math.max(config#uid#.grid.power, 0))
         let loadFromUnknown = Math.max((config#uid#.load.power - loadFromSolar - loadFromBattery - loadFromAux - loadFromGrid), 0)
-        
+
+        log#uid#('| loadFromSolar = ' + loadFromSolar)
+        log#uid#('| loadFromBattery = ' + loadFromBattery)
+        log#uid#('| loadFromAux = ' + loadFromAux)
+        log#uid#('| loadFromGrid = ' + loadFromGrid)
+        log#uid#('| loadFromUnknown = ' + loadFromUnknown)
+
         let RECT_CIRCUMFERENCE#uid# = 2 * 64 + 2 * 30
         let homeBatteryCircumferenceRect = RECT_CIRCUMFERENCE#uid# * loadFromBattery / config#uid#.load.power
         let homeSolarCircumferenceRect = RECT_CIRCUMFERENCE#uid# * loadFromSolar / config#uid#.load.power
