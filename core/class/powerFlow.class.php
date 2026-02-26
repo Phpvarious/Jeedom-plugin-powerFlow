@@ -110,6 +110,7 @@ class powerFlow extends eqLogic
 		$changeColor->setType('action');
 		$changeColor->setSubType('message');
 		$changeColor->save();
+		$this->_needRefreshWidget = true;
 		log::add(__CLASS__, 'debug', '└────────────────────');
 
 	}
@@ -379,7 +380,7 @@ class powerFlow extends eqLogic
 							$replace['#batteryAlertPower#'] = $this->getConfiguration('battery::power::alert');
 						} else log::add(__CLASS__, 'debug', '| KO  battery::power::alert not numeric !');
 					}
-					///  MAX  \\\
+					///  POWER MAX  \\\
 					if ($this->getConfiguration('battery::power::max') != '') {
 						if (preg_match("/^\#(variable\(.*?\))\#$/", $this->getConfiguration('battery::power::max', ''), $dataStore)) {
 							$result = jeedom::evaluateExpression($dataStore[1]);
@@ -390,13 +391,12 @@ class powerFlow extends eqLogic
 							$replace['#batteryMaxPower#'] = $this->getConfiguration('battery::power::max');
 						} else log::add(__CLASS__, 'debug', '| KO  battery::power::max not numeric !');
 					}
-					///  MPPT  \\\
+					///  POWER MPPT  \\\
 					if ($this->getConfiguration('battery::mppt::desactivate', 1) == 0) {
 						if ($this->getConfiguration('battery::mppt::power::cmd') != '') {
 							if (preg_match("/^\#(\d+)\#$/", $this->getConfiguration('battery::mppt::power::cmd', ''), $mpptPowerId)) {
 								$replace['#battery_mppt_power_cmd#'] = $mpptPowerId[1];
-
-								///  MAX MPPT \\\
+								///  POWER MPPT MAX \\\
 								if ($this->getConfiguration('battery::mppt::power::max') != '') {
 									if (preg_match("/^\#(variable\(.*?\))\#$/", $this->getConfiguration('battery::mppt::power::max', ''), $dataStore)) {
 										$result = jeedom::evaluateExpression($dataStore[1]);
@@ -407,7 +407,7 @@ class powerFlow extends eqLogic
 										$replace['#batteryMpptMaxPower#'] = $this->getConfiguration('battery::mppt::power::max');
 									} else log::add(__CLASS__, 'debug', '| KO  battery::power::mppt::max not numeric !');
 								}
-								///  ALERT MPPT POWER  \\\
+								///  MPPT POWER ALERT  \\\
 								if ($this->getConfiguration('battery::mppt::power::alert') != '') {
 									if (preg_match("/^\#(variable\(.*?\))\#$/", $this->getConfiguration('battery::mppt::power::alert', ''), $dataStore)) {
 										$result = jeedom::evaluateExpression($dataStore[1]);
@@ -417,6 +417,10 @@ class powerFlow extends eqLogic
 									} else if (is_numeric($this->getConfiguration('battery::mppt::power::alert'))) {
 										$replace['#batteryMpptAlertPower#'] = $this->getConfiguration('battery::mppt::power::alert');
 									} else log::add(__CLASS__, 'debug', '| KO  battery::mppt::power::alert not numeric !');
+								}
+								///  MPPT POWER useForCalcul  \\\
+								if ($this->getConfiguration('battery::mppt::power::calcul', 0) == 1) {
+									$replace['#batteryMpptPowerUseForCalcul#'] = '1';
 								}
 								if ($this->getConfiguration('battery::mppt::color') != '') $replace['#batteryMpptColor#'] = $this->getConfiguration('battery::mppt::color');
 								$replace['#mpptName#'] = $this->getConfiguration('battery::mppt::name', '');
@@ -452,7 +456,7 @@ class powerFlow extends eqLogic
 							$replace['#batteryCapacity#'] = $this->getConfiguration('battery::power::capacity');
 						} else log::add(__CLASS__, 'debug', '| KO  battery::power::capacity not numeric !');
 					}
-					///  SOC MIN  \\\
+					///  SOC SHUTDOWN  \\\
 					if ($this->getConfiguration('battery::soc::shutdown') != '') {
 						if (preg_match("/^\#(variable\(.*?\))\#$/", $this->getConfiguration('battery::soc::shutdown', ''), $dataStore)) {
 							$result = jeedom::evaluateExpression($dataStore[1]);
@@ -463,6 +467,30 @@ class powerFlow extends eqLogic
 							$replace['#batterySocShutdown#'] = min($this->getConfiguration('battery::soc::shutdown'), 100);
 						} else log::add(__CLASS__, 'debug', '| KO  battery::soc::shutdown not numeric !');
 					}
+					/*
+					///  SOC EMPTY  \\\
+					if ($this->getConfiguration('battery::soc::empty') != '') {
+						if (preg_match("/^\#(variable\(.*?\))\#$/", $this->getConfiguration('battery::soc::empty', ''), $dataStore)) {
+							$result = jeedom::evaluateExpression($dataStore[1]);
+							if (is_numeric($result)) {
+								$replace['#batteryEmptyCapacity#'] = min($result, 15);
+							} else log::add(__CLASS__, 'debug', '| KO  battery::soc::empty [' . $dataStore[1] . '] not numeric !');
+						} else if (is_numeric($this->getConfiguration('battery::soc::empty'))) {
+							$replace['#batteryEmptyCapacity#'] = min($this->getConfiguration('battery::soc::empty'), 15);
+						} else log::add(__CLASS__, 'debug', '| KO  battery::soc::empty not numeric !');
+					}
+					///  SOC FULL  \\\
+					if ($this->getConfiguration('battery::soc::full') != '') {
+						if (preg_match("/^\#(variable\(.*?\))\#$/", $this->getConfiguration('battery::soc::full', ''), $dataStore)) {
+							$result = jeedom::evaluateExpression($dataStore[1]);
+							if (is_numeric($result)) {
+								$replace['#batteryFullCapacity#'] = max($result, 80);
+							} else log::add(__CLASS__, 'debug', '| KO  battery::soc::full [' . $dataStore[1] . '] not numeric !');
+						} else if (is_numeric($this->getConfiguration('battery::soc::full'))) {
+							$replace['#batteryFullCapacity#'] = max($this->getConfiguration('battery::soc::full'), 80);
+						} else log::add(__CLASS__, 'debug', '| KO  battery::soc::full not numeric !');
+					}
+					*/
 					///  COLORS  \\\
 					if ($this->getConfiguration('battery::color::state::0') != '') $replace['#batteryState0Color#'] = $this->getConfiguration('battery::color::state::0');
 					if ($this->getConfiguration('battery::color::state::25') != '') $replace['#batteryState25Color#'] = $this->getConfiguration('battery::color::state::25');
@@ -777,6 +805,7 @@ class powerFlow extends eqLogic
 				$i2++;
 			}
 		}
+		if (count($result_perso) > 0) $replace['#hasPerso#'] = '1';
 		$replace['#persoarray#'] = json_encode($result_perso);
 		/////////////////////////////////////
 		//////////////// CMD ////////////////

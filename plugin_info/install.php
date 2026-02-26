@@ -33,7 +33,7 @@ function powerFlow_install() {
 		$powerFlow->setConfiguration('grid::color::buy', null);
 		$powerFlow->save();
 	}
-	log::add(__CLASS__, 'debug', '└────────────────────');
+	log::add('powerFlow', 'debug', '└────────────────────');
 }
 
 function powerFlow_update() {
@@ -53,5 +53,5 @@ function powerFlow_update() {
 		$powerFlow->setConfiguration('grid::color::buy', null);
 		$powerFlow->save();
 	}
-	log::add(__CLASS__, 'debug', '└────────────────────');
+	log::add('powerFlow', 'debug', '└────────────────────');
 }
