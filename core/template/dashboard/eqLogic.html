@@ -68,6 +68,17 @@
       0% { opacity: 0.8; }
       100% { opacity: 0.4; }
     }
+    @keyframes blinkingBar#uid# {
+      /* PR 26/02/2026 */
+      0% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+    .blinkBar#uid# {
+      /* PR 26/02/2026 */
+      -moz-animation: blinkingBar#uid# 1s ease-in-out infinite;
+      -webkit-animation: blinkingBar#uid# 1s ease-in-out infinite;
+      animation: blinkingBar#uid# 1s ease-in-out infinite;
+    }
     .blink#uid# {
       -moz-animation: blinking#uid# 0.7s linear infinite;
       -webkit-animation: blinking#uid# 0.7s linear infinite;
@@ -189,15 +200,38 @@
         if (value < 0) val = -val
         return Array(val, div);
       }
-      function getBatteryIcon#uid#(value = 100) { // , full_capacity = 100, empty_capacity = 0
-        log#uid#('| getBatteryIcon() -> ' + value + '%') // + ' | full : ' + full_capacity + ' % | empty : ' + empty_capacity + ' %'
-        //let available = full_capacity - empty_capacity
-        //let value_pourcent = Math.trunc(value * available / 100)
+      function getBatteryIcon#uid#(value = 100, shutdown = 0) {
+        log#uid#('| getBatteryIcon() -> value = ' + value + '% | shutdown -> ' + shutdown)
+        /* PR 26/02/2026 */
+        var bar = ''
+        if (value >= shutdown && value < 25) {
+          bar += '<rect id="battery-rect-test1" fill="currentColor" class="blinkBar#uid#" x="17.5" y="43.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+        } else if (value >= 25 && value < 50) {
+          bar += '<rect id="battery-rect-test1" fill="currentColor" class="" x="17.5" y="43.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test2" fill="currentColor" class="blinkBar#uid#" x="17.5" y="33" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+        } else if (value >= 50 && value < 75) {
+          bar += '<rect id="battery-rect-test1" fill="currentColor" class="" x="17.5" y="43.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test2" fill="currentColor" class="" x="17.5" y="33" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test3" fill="currentColor" class="blinkBar#uid#" x="17.5" y="22.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+        } else if (value >= 75 && value < 100) {
+          bar += '<rect id="battery-rect-test1" fill="currentColor" class="" x="17.5" y="43.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test2" fill="currentColor" class="" x="17.5" y="33" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test3" fill="currentColor" class="" x="17.5" y="22.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test4" fill="currentColor" class="blinkBar#uid#" x="17.5" y="12" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+        } else if (value >= 100) {
+          bar += '<rect id="battery-rect-test1" fill="currentColor" class="" x="17.5" y="43.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test2" fill="currentColor" class="" x="17.5" y="33" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test3" fill="currentColor" class="" x="17.5" y="22.5" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+          bar += '<rect id="battery-rect-test4" fill="currentColor" class="" x="17.5" y="12" width="25" height="8" rx="2" ry="2" stroke="transparent"></rect>'
+        }
+        return bar;
+        /* PR 26/02/2026 
         if (value < 25) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-0"/>'; // value_pourcent
         else if (value < 50) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-25"/>'; // value_pourcent
         else if (value < 75) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-50"/>'; // value_pourcent
         else if (value < 100) return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-75"/>'; // value_pourcent
         else return '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-100"/>';
+        */
       }
     
       function numIsPair(n) {
@@ -2714,7 +2748,11 @@
                 html += '</svg>'
               }
             } else {
-              html += '<svg id="battery-icon-#uid#" fill="var(--battery-color-#uid#)" x="' + x_icon + '" y="' + y_icon + '" width="60" height="60" style="color:var(--battery-state#uid#)"></svg>'
+              //html += '<svg id="battery-icon-#uid#" fill="var(--battery-color-#uid#)" x="' + x_icon + '" y="' + y_icon + '" width="60" height="60" style="color:var(--battery-state#uid#)"></svg>' //  // PR 26/02/2026
+              html += '<svg id="battery-icon-#uid#" fill="var(--battery-color-#uid#)" x="' + x_icon + '" y="' + y_icon + '" width="60" height="60" style="color:var(--battery-state#uid#)">' // PR 26/02/2026
+              html += '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-battery-0"/>' // PR 26/02/2026
+              html += '</svg>' // PR 26/02/2026
+              html += '<svg id="battery-animate-#uid#" color="var(--battery-color-#uid#)" x="' + x_icon + '" y="' + y_icon + '" width="60" height="60"></svg>' // PR 26/02/2026
             }
             ///////////////
             ///  LINE   ///
@@ -3289,17 +3327,19 @@
         if (el == 'init' || el == 'battery state') {
           ///  ICON  \\\
           if (!config#uid#.battery.icon) {
-            document.getElementById("battery-icon-#uid#").innerHTML = getBatteryIcon#uid#(config#uid#.battery.state.state) //, config#uid#.battery.full_capacity, config#uid#.battery.empty_capacity
+            document.getElementById("battery-animate-#uid#").innerHTML = getBatteryIcon#uid#(config#uid#.battery.state.state, config#uid#.battery.soc.shutdown) // PR 26/02/2026
+            //document.getElementById("battery-icon-#uid#").innerHTML = getBatteryIcon#uid#(config#uid#.battery.state.state) // PR 26/02/2026
             if (config#uid#.battery.autoColorBattery) {
               ///  set color icon & state  \\\
               let color_battery = 'var(--battery-color-#uid#)'
-              if (config#uid#.battery.state.state < 25) color_battery = 'var(--battery-state-0-#uid#)' //config#uid#.battery.empty_capacity
+              if (config#uid#.battery.state.state < 25) color_battery = 'var(--battery-state-0-#uid#)'
               else if (config#uid#.battery.state.state < 50) color_battery = 'var(--battery-state-25-#uid#)'
               else if (config#uid#.battery.state.state < 75) color_battery = 'var(--battery-state-50-#uid#)'
-              else if (config#uid#.battery.state.state < 100) color_battery = 'var(--battery-state-75-#uid#)' //config#uid#.battery.full_capacity
+              else if (config#uid#.battery.state.state < 100) color_battery = 'var(--battery-state-75-#uid#)'
               else color_battery = 'var(--battery-state-100-#uid#)'
               document.getElementById("battery-icon-#uid#").style.color = color_battery
               document.getElementById("battery-soc-#uid#")?.setAttribute("fill", color_battery)
+              document.getElementById("battery-animate-#uid#").style.color = color_battery // PR 26/02/2026
             }
           }
           if (config#uid#.battery.state.show) document.getElementById("battery-soc-#uid#").innerHTML = trunc#uid#(config#uid#.battery.state.state, 1) + '%'
@@ -3417,9 +3457,9 @@
           let formattedResultTime = ""
           let duration = ""
           if (totalBattery > 0) {  // Décharge
-            totalSeconds = (((config#uid#.battery.state.state - config#uid#.battery.soc.shutdown) / 100) * config#uid#.battery.capacity) / totalBattery * 60 * 60  //PR 07/02
+            totalSeconds = (((config#uid#.battery.state.state - config#uid#.battery.soc.shutdown) / 100) * config#uid#.battery.capacity) / totalBattery * 60 * 60
           } else if (totalBattery < 0) { // Charge
-            totalSeconds = ((((config#uid#.battery.full_capacity - config#uid#.battery.state.state) / 100) * config#uid#.battery.capacity) / totalBattery) * 60 * 60 * -1 //PR 07/02
+            totalSeconds = ((((config#uid#.battery.full_capacity - config#uid#.battery.state.state) / 100) * config#uid#.battery.capacity) / totalBattery) * 60 * 60 * -1
           }
           totalSeconds = Math.max(totalSeconds, 0)
           log#uid#('| totalSeconds = ' + totalSeconds)
