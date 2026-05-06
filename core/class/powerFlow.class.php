@@ -466,10 +466,10 @@ class powerFlow extends eqLogic
 						} else if (preg_match("/^\#(\d+)\#$/", $this->getConfiguration('battery::soc::shutdown', ''), $idSocShutdown)) {
 							$result = jeedom::evaluateExpression($idSocShutdown[0]);
 							if (is_numeric($result)) {
-								$replace['#batterySocShutdown#'] = max(min($result, 100), 0);
+								$replace['#battery_soc_shutdown_cmd#'] = $idSocShutdown[1];
 							} else log::add(__CLASS__, 'debug', '|  KO  battery::soc::shutdown CMD not numeric !');
 						} else if (is_numeric($this->getConfiguration('battery::soc::shutdown'))) {
-							$replace['#batterySocShutdown#'] = min($this->getConfiguration('battery::soc::shutdown'), 100);
+							$replace['#batterySocShutdown#'] = max(min($this->getConfiguration('battery::soc::shutdown'), 100), 0);
 						} else log::add(__CLASS__, 'debug', '| KO  battery::soc::shutdown not numeric !');
 					}
 					/*
