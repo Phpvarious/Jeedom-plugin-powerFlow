@@ -876,6 +876,20 @@
         }
       })
     }
+    ///  BATTERY SOC SHUTDOWN \\\
+    if ('#battery_soc_shutdown_cmd#' != '#' + 'battery_soc_shutdown_cmd#') {
+      jeedom.cmd.execute({
+        id: '#battery_soc_shutdown_cmd#',
+        async: false,
+        success:  function(stateValue) {
+          config#uid#.battery.soc.shutdown = isNaN(parseFloat(stateValue)) ? 0 : Math.max(Math.min(parseFloat(stateValue), 100), 0)
+          jeedom.cmd.addUpdateFunction('#battery_soc_shutdown_cmd#', function(_options) {
+            config#uid#.battery.soc.shutdown = isNaN(parseFloat(_options.value)) ? 0 : Math.max(Math.min(parseFloat(_options.value), 100), 0)
+            if (config#uid#.has_battery) calculateBattery#uid#('batterySocShutdown')
+          })
+        }
+      })
+    }
     ///  BATTERY DAILY CHARGE  \\\
     if ('#battery_daily_charge_cmd#' != '#' + 'battery_daily_charge_cmd#') {
       jeedom.cmd.byId({
@@ -3324,7 +3338,7 @@
       var ElDomExist = !!document.getElementById("widget#uid#")
       log#uid#('| ElDomExist ? ' + ElDomExist)
       if (ElDomExist) {
-        if (el == 'init' || el == 'battery state') {
+        if (el == 'init' || el == 'battery state' || el == 'batterySocShutdown') {
           ///  ICON  \\\
           if (!config#uid#.battery.icon) {
             document.getElementById("battery-animate-#uid#").innerHTML = getBatteryIcon#uid#(config#uid#.battery.state.state, config#uid#.battery.soc.shutdown) // PR 26/02/2026
