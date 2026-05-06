@@ -1104,6 +1104,9 @@ $eqLogics = eqLogic::byType('powerFlow');
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery::soc::shutdown">
 												<span class="input-group-btn">
+													<a class="btn btn-default listCmdInfo" data-type="battery::soc::shutdown" data-subtype="numeric" title="{{Choisir une commande}}"><i class="fas fa-list-alt"></i></a>
+												</span>
+												<span class="input-group-btn">
 													<a class="btn btn-default cursor bt_selectDataStore roundedRight" data-type="battery::soc::shutdown" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>
 												</span>
 											</div>
