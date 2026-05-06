@@ -461,8 +461,13 @@ class powerFlow extends eqLogic
 						if (preg_match("/^\#(variable\(.*?\))\#$/", $this->getConfiguration('battery::soc::shutdown', ''), $dataStore)) {
 							$result = jeedom::evaluateExpression($dataStore[1]);
 							if (is_numeric($result)) {
-								$replace['#batterySocShutdown#'] = min($result, 100);
-							} else log::add(__CLASS__, 'debug', '| KO  battery::soc::shutdown [' . $dataStore[1] . '] not numeric !');
+								$replace['#batterySocShutdown#'] = max(min($result, 100), 0);
+							} else log::add(__CLASS__, 'debug', '|  KO  battery::soc::shutdown (' . $dataStore[1] . ') not numeric > ' . $result);
+						} else if (preg_match("/^\#(\d+)\#$/", $this->getConfiguration('battery::soc::shutdown', ''), $idSocShutdown)) {
+							$result = jeedom::evaluateExpression($idSocShutdown[0]);
+							if (is_numeric($result)) {
+								$replace['#batterySocShutdown#'] = max(min($result, 100), 0);
+							} else log::add(__CLASS__, 'debug', '|  KO  battery::soc::shutdown CMD not numeric !');
 						} else if (is_numeric($this->getConfiguration('battery::soc::shutdown'))) {
 							$replace['#batterySocShutdown#'] = min($this->getConfiguration('battery::soc::shutdown'), 100);
 						} else log::add(__CLASS__, 'debug', '| KO  battery::soc::shutdown not numeric !');
