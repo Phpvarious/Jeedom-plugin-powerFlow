@@ -96,6 +96,16 @@
       transition: stroke-dashoffset 0.4s, stroke-dasharray 0.4s;
       stroke-width: var(--strokeGaugeRatio-#uid#);
     }
+    /* Transitions fluides pour les jauges et icônes */
+    .widget#uid# rect,
+    .widget#uid# path,
+    .widget#uid# circle,
+    .widget#uid# text,
+    .widget#uid# svg,
+    .widget#uid# image {
+      transition: all 0.5s ease-in-out !important;
+      transform-box: fill-box;
+    }
   </style>
   <center class="widget-name">
     <span class="warning" title="#alert_name#">
@@ -441,7 +451,8 @@
         power_invert: false,
         power_unit:'W',
         status: 1,
-        has_grid_power: false,         
+        has_grid_power: false,
+        model: 'defaut',
       },
       aux: {
         type: 'gen',
@@ -506,6 +517,7 @@
     if ("#noGridColor#" != '#'+'noGridColor#') document.documentElement.style.setProperty('--no_grid_colour#uid#', '#noGridColor#')
     if ("#PowerInvert#" == '1') config#uid#.grid.power_invert = true
     if (is_numeric('#gridAlertPower#')) config#uid#.grid.alert_power = '#gridAlertPower#'
+    if ("#gridModel#" != '#'+'gridModel#') config#uid#.grid.model = '#gridModel#'
     ////////////////////////// BATTERY /////////////////////
     if ("#batteryIcon#" != '#'+'batteryIcon#') config#uid#.battery.icon = '#batteryIcon#'
     if ("#dailyBatteryChargeText#" != '#'+'dailyBatteryChargeText#') config#uid#.battery.daily.text_charge = "#dailyBatteryChargeText#"
@@ -2491,23 +2503,27 @@
             ///////////////
             ///  ICON   ///
             ///////////////
-            // OFF
-            html += '<svg id="grid-transmission-off-#uid#" x="'
-            html += (config#uid#.grid.has_grid_power) ? 0 : 110
-            html += '" y="197.5" width="62" height="62" style="color:var(--no_grid_colour#uid#)" class="'
-            html += (config#uid#.grid.status === 1) ? 'hidden-#uid# ' : ''
-            html += (config#uid#.grid.status === 0 && config#uid#.blink) ? 'blink#uid# ' : ''
-            html += '">'
-            html += '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-transmission-off"/>'
-            html += '</svg>'
-            // ON
-            html += '<svg id="grid-transmission-on-#uid#" x="'
-            html += (config#uid#.grid.has_grid_power) ? 0 : 110
-            html += '" y="197.5" width="62" height="62" style="color:var(--grid-color-#uid#)" class="'
-            html += (config#uid#.grid.status === 0) ? 'hidden-#uid#' : ''
-            html += '">'
-            html += '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-transmission-on"/>'
-            html += '</svg>'
+            let x_grid_icon = (config#uid#.grid.has_grid_power) ? 0 : 110
+            let y_grid_icon = 197.5
+            if (config#uid#.grid.model == 'defaut') {
+                // OFF
+                html += '<svg id="grid-transmission-off-#uid#" x="' + x_grid_icon + '" y="' + y_grid_icon + '" width="62" height="62" style="color:var(--no_grid_colour#uid#)" class="'
+                html += (config#uid#.grid.status === 1) ? 'hidden-#uid# ' : ''
+                html += (config#uid#.grid.status === 0 && config#uid#.blink) ? 'blink#uid# ' : ''
+                html += '">'
+                html += '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-transmission-off"/>'
+                html += '</svg>'
+                // ON
+                html += '<svg id="grid-transmission-on-#uid#" x="' + x_grid_icon + '" y="' + y_grid_icon + '" width="62" height="62" style="color:var(--grid-color-#uid#)" class="'
+                html += (config#uid#.grid.status === 0) ? 'hidden-#uid#' : ''
+                html += '">'
+                html += '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-transmission-on"/>'
+                html += '</svg>'
+            } else if (config#uid#.grid.model == 'none') {
+                html += '<rect id="grid-icon-#uid#" x="' + (x_grid_icon + 5) + '" y="' + (y_grid_icon + 5) + '" width="52" height="52" rx="4.5" ry="4.5" fill="none" stroke="' + ((config#uid#.grid.status === 0) ? 'var(--no_grid_colour#uid#)' : 'var(--grid-color-#uid#)') + '" pointer-events="all"></rect>'
+            } else {
+                html += '<image id="grid-icon-#uid#" xlink:href="' + config#uid#.grid.model + '" x="' + (x_grid_icon + 5) + '" y="' + (y_grid_icon + 5) + '" height="52" width="52" preserveAspectRatio="none"></image>'
+            }
             ///////////////
             ///  DAILY  ///
             ///////////////
@@ -3013,8 +3029,12 @@
           if (config#uid#.activateGauge) {
             let gaugePourcent = config#uid#.solar.power * 100 / config#uid#.solar.max_power
             let width_rect_gauge = Math.max(Math.min((gaugePourcent / 100 * 70), 70), 0)
-            document.getElementById("pv-rect-gauge-#uid#")?.setAttribute('width', width_rect_gauge)
-          } else document.getElementById("pv-rect-gauge-#uid#")?.setAttribute('width', 0)
+            let g = document.getElementById("pv-rect-gauge-#uid#");
+            if (g) g.style.width = width_rect_gauge + 'px';
+          } else {
+            let g = document.getElementById("pv-rect-gauge-#uid#");
+            if (g) g.style.width = '0px';
+          }
         }
         
         ///  ALERT  \\\
@@ -3150,8 +3170,12 @@
           if (config#uid#.activateGauge) {
             let gaugePourcent = config#uid#.load.power * 100 / config#uid#.load.max_power
             let width_rect_gauge = Math.max(Math.min((gaugePourcent / 100 * 70), 70), 0)
-            document.getElementById("load-rect-gauge-#uid#")?.setAttribute('width', width_rect_gauge)
-          } else document.getElementById("load-rect-gauge-#uid#")?.setAttribute('width', 0)
+            let g = document.getElementById("load-rect-gauge-#uid#");
+            if (g) g.style.width = width_rect_gauge + 'px';
+          } else {
+            let g = document.getElementById("load-rect-gauge-#uid#");
+            if (g) g.style.width = '0px';
+          }
         }
         
         /// ALERT  \\\
@@ -3279,8 +3303,12 @@
                 if (Math.abs(config#uid#.battery.power.state) > 0) {
                   let gaugePourcent = Math.abs(config#uid#.battery.power.state) * 100 / config#uid#.battery.max_power
                   let width_rect_gauge = Math.max(Math.min((gaugePourcent / 100 * 70), 70), 0)
-                  document.getElementById("battery-rect-gauge-#uid#")?.setAttribute('width', width_rect_gauge)
-                } else document.getElementById("battery-rect-gauge-#uid#")?.setAttribute('width', 0)
+                  let g = document.getElementById("battery-rect-gauge-#uid#");
+                  if (g) g.style.width = width_rect_gauge + 'px';
+                } else {
+                  let g = document.getElementById("battery-rect-gauge-#uid#");
+                  if (g) g.style.width = '0px';
+                }
               }
             }
           }
@@ -3453,8 +3481,8 @@
           let gaugePourcent = Math.abs(config#uid#.grid.power) * 100 / Math.abs(config#uid#.grid.max_power)
           let width_rect_gauge = Math.max(Math.min((gaugePourcent / 100 * 70), 70), 0)
           if (is_object(gauge = document.getElementById("grid-rect-gauge-#uid#"))) {
-            gauge.setAttribute('width', width_rect_gauge)
-            gauge.setAttribute("fill", color)
+            gauge.style.width = width_rect_gauge + 'px'
+            gauge.style.fill = color
             if (config#uid#.grid.power < 0) {
               gauge.style.transform = "translateX(" + (70 - width_rect_gauge) + "px)"
             } else {
@@ -3514,15 +3542,40 @@
         log#uid#('| animation_speed = ' + speed)
         
         /// ICON  \\\
-        if (config#uid#.grid.status === 1) {
-          document.getElementById("grid-transmission-on-#uid#").style.color = color
-          document.getElementById("grid-transmission-off-#uid#").style.color = color
-          if (config#uid#.grid.power == 0) {
-            document.getElementById("grid-transmission-off-#uid#")?.classList.remove("hidden-#uid#")
-            document.getElementById("grid-transmission-on-#uid#")?.classList.add("hidden-#uid#")
+        if (config#uid#.grid.model == 'defaut') {
+          let on = document.getElementById("grid-transmission-on-#uid#")
+          let off = document.getElementById("grid-transmission-off-#uid#")
+          if (config#uid#.grid.status === 0) {
+            on?.classList.add("hidden-#uid#")
+            off?.classList.remove("hidden-#uid#")
+            if (off) off.style.color = "var(--no_grid_colour#uid#)"
+            if (config#uid#.blink) off?.classList.add("blink#uid#")
           } else {
-            document.getElementById("grid-transmission-on-#uid#")?.classList.remove("hidden-#uid#")
-            document.getElementById("grid-transmission-off-#uid#")?.classList.add("hidden-#uid#")
+            if (off) off.style.color = color
+            if (on) on.style.color = color
+            off?.classList.remove("blink#uid#")
+            if (config#uid#.grid.power == 0) {
+              off?.classList.remove("hidden-#uid#")
+              on?.classList.add("hidden-#uid#")
+            } else {
+              on?.classList.remove("hidden-#uid#")
+              off?.classList.add("hidden-#uid#")
+            }
+          }
+        } else {
+          let icon = document.getElementById("grid-icon-#uid#")
+          if (icon) {
+            if (config#uid#.grid.status === 0) {
+              icon.style.opacity = 0.4
+              icon.style.filter = "grayscale(1)"
+              if (icon.tagName == 'rect') icon.setAttribute("stroke", "var(--no_grid_colour#uid#)")
+              if (config#uid#.blink) icon.classList.add("blink#uid#")
+            } else {
+              icon.classList.remove("blink#uid#")
+              icon.style.filter = "none"
+              icon.style.opacity = (config#uid#.grid.power == 0) ? 0.3 : 1
+              if (icon.tagName == 'rect') icon.setAttribute("stroke", color)
+            }
           }
         }
       } // ElDomExist
