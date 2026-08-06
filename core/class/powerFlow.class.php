@@ -227,6 +227,11 @@ class powerFlow extends eqLogic
 		}
 		///  COLOR  \\\
 		if ($this->getConfiguration('grid::color') != '') $replace['#gridColor#'] = $this->getConfiguration('grid::color');
+		if ($this->getConfiguration('grid::img::none', 0) == 1) {
+			$replace['#gridModel#'] = 'none';
+		} else if ($this->getConfiguration('grid::img') != '') {
+			$replace['#gridModel#'] = $this->getConfiguration('grid::img');
+		}
 		/////////////////////////////////////
 		////////////// SOLAR ////////////////
 		/////////////////////////////////////

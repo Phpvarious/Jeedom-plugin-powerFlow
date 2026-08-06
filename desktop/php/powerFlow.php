@@ -424,6 +424,27 @@ $eqLogics = eqLogic::byType('powerFlow');
 												</span>
 											</div>
 										</div>
+										<div class="col-lg-3">
+											<div class="input-group">
+												<span class="input-group-addon roundedLeft input-group-addon" style="min-width: 125px;">
+													{{Icône}}
+												</span>
+												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="grid::img" disabled />
+												<span class="input-group-btn">
+													<a class="btn btn-default bt_library" title="{{Bibliothèque}}" data-options="noIcon" data-type="grid::img"><i class="fas fa-photo-video"></i></a>
+												</span>
+												<span class="input-group-btn">
+													<a class="btn btn-default restoreDefaut roundedRight" data-type="grid::img" data-defaut="" title="{{Icône par défaut}}">
+														<i class="fas fa-eraser"></i>
+													</a>
+												</span>
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="grid::img::none">{{Aucun}}
+												<sup><i class="fas fa-question-circle" title="{{Prioritaire sur l'icône}}<br>{{Affiche simplement un cadre}}"></i></sup>
+											</label>
+										</div>
 									</div>
 								</fieldset>
 							</form>
