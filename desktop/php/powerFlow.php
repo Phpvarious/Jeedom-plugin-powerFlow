@@ -424,6 +424,27 @@ $eqLogics = eqLogic::byType('powerFlow');
 												</span>
 											</div>
 										</div>
+										<div class="col-lg-3">
+											<div class="input-group">
+												<span class="input-group-addon roundedLeft input-group-addon" style="min-width: 125px;">
+													{{Icône}}
+												</span>
+												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="grid::img" disabled />
+												<span class="input-group-btn">
+													<a class="btn btn-default bt_library" title="{{Bibliothèque}}" data-options="noIcon" data-type="grid::img"><i class="fas fa-photo-video"></i></a>
+												</span>
+												<span class="input-group-btn">
+													<a class="btn btn-default restoreDefaut roundedRight" data-type="grid::img" data-defaut="" title="{{Icône par défaut}}">
+														<i class="fas fa-eraser"></i>
+													</a>
+												</span>
+											</div>
+										</div>
+										<div class="col-lg-2">
+											<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="grid::img::none">{{Aucun}}
+												<sup><i class="fas fa-question-circle" title="{{Prioritaire sur l'icône}}<br>{{Affiche simplement un cadre}}"></i></sup>
+											</label>
+										</div>
 									</div>
 								</fieldset>
 							</form>
@@ -473,7 +494,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup>
+													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="grid::power::alert">
 												<span class="input-group-btn">
@@ -635,6 +656,29 @@ $eqLogics = eqLogic::byType('powerFlow');
 										</div>
 										<div class="col-lg-3">
 											<div class="input-group">
+												<span class="input-group-addon roundedLeft input-group-addon" style="min-width: 125px;">
+													{{Icône}}
+												</span>
+												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="solar::img" disabled />
+												<span class="input-group-btn">
+													<a class="btn btn-default bt_library" title="{{Bibliothèque}}" data-options="noIcon" data-type="solar::img"><i class="fas fa-photo-video"></i></a>
+												</span>
+												<span class="input-group-btn">
+													<a class="btn btn-default restoreDefaut roundedRight" data-type="solar::img" data-defaut="" title="{{Icône par défaut}}">
+														<i class="fas fa-eraser"></i>
+													</a>
+												</span>
+											</div>
+										</div>
+										<!--
+										<div class="col-lg-2">
+											<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="solar::img::none">{{Aucun}}
+												<sup><i class="fas fa-question-circle" title="{{Prioritaire sur l'icône}}<br>{{Affiche simplement un cadre}}"></i></sup>
+											</label>
+										</div>
+										-->
+										<div class="col-lg-3">
+											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
 													{{Max.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{Puissance maximale que peut produire tous les panneaux réunis.}}"></i></sup>
 												</span>
@@ -647,7 +691,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup>
+													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="solar::power::alert">
 												<span class="input-group-btn">
@@ -859,7 +903,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup>
+													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery::power::alert">
 												<span class="input-group-btn">
@@ -924,7 +968,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup>
+													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery::mppt::power::alert">
 												<span class="input-group-btn">
@@ -1250,7 +1294,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup>
+													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="load::power::alert">
 												<span class="input-group-btn">
@@ -1349,7 +1393,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 								<fieldset>
 									<div class="form-group">
 										<div class="col-lg-3">
-											<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="load::force4load">{{Forcer 4 recépteurs par colonne}} </label>
+											<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="load::force4load">{{Forcer 4 récepteurs par colonne}} </label>
 										</div>
 									</div>
 								</fieldset>
@@ -1436,7 +1480,7 @@ $eqLogics = eqLogic::byType('powerFlow');
 										<div class="col-lg-3">
 											<div class="input-group">
 												<span class="input-group-addon roundedLeft" style="min-width: 125px;">
-													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup>
+													{{Alerte.}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup>
 												</span>
 												<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="aux::power::alert">
 												<span class="input-group-btn">

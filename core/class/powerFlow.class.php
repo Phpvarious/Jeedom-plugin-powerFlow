@@ -227,6 +227,11 @@ class powerFlow extends eqLogic
 		}
 		///  COLOR  \\\
 		if ($this->getConfiguration('grid::color') != '') $replace['#gridColor#'] = $this->getConfiguration('grid::color');
+		if ($this->getConfiguration('grid::img::none', 0) == 1) {
+			$replace['#gridModel#'] = 'none';
+		} else if ($this->getConfiguration('grid::img') != '') {
+			$replace['#gridModel#'] = $this->getConfiguration('grid::img');
+		}
 		/////////////////////////////////////
 		////////////// SOLAR ////////////////
 		/////////////////////////////////////
@@ -247,6 +252,11 @@ class powerFlow extends eqLogic
 			$replace['#pvState0Color#'] = '#ffffff00';
 		} else if ($this->getConfiguration('solar::0::color') != '') {
 			$replace['#pvState0Color#'] = $this->getConfiguration('solar::0::color');
+		}
+		if ($this->getConfiguration('solar::img::none', 0) == 1) {
+			$replace['#solarModel#'] = 'none';
+		} else if ($this->getConfiguration('solar::img') != '') {
+			$replace['#solarModel#'] = $this->getConfiguration('solar::img');
 		}
 		///  PVs  \\\
 		$result_pv = array();
