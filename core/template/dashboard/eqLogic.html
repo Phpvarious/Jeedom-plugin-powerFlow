@@ -391,7 +391,8 @@
           isHistorized:0,
           id: false,
         },
-        sell: false, // on, off, 1, 0, undefined // Todo        
+        model: 'defaut',
+        sell: false, // on, off, 1, 0, undefined // Todo
       },
       load: {
         animation_speed: 5,
@@ -487,6 +488,7 @@
     if ("#solarColor#" != '#'+'solarColor#') document.documentElement.style.setProperty('--solar-color-#uid#', '#solarColor#')
     if ("#pvState0Color#" != '#'+'pvState0Color#') document.documentElement.style.setProperty('--solar-0-color-#uid#', '#pvState0Color#')
     if (is_numeric('#solarAlertPower#')) config#uid#.solar.alert_power = '#solarAlertPower#'
+    if ("#solarModel#" != '#'+'solarModel#') config#uid#.solar.model = '#solarModel#'
     ////////////////////////// LOAD ////////////////////////
     if ("#loadAnimate#" != '#'+'loadAnimate#' && "#loadAnimate#" == '0') config#uid#.load.animate_load_enable = 0
     if ("#dailyLoadText#" != '#'+'dailyLoadText#') config#uid#.load.daily.text = "#dailyLoadText#"
@@ -1913,12 +1915,19 @@
             html += '<animateMotion id="pv-anim-1-#uid#" dur="' + config#uid#.solar.animation_speed + 's" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear">'
             html += '<mpath xlink:href="#pv-line-1-#uid#"/></animateMotion></circle>'
             ///  SOLAR ICON  \\\
-            html += '<svg id="pv-icon-#uid#" xmlns="http://www.w3.org/2000/svg" x="'
-            html += config#uid#.solar.daily.show === false ? '220' : (config#uid#.solar.mppts > 6 ? '205' : '180')
-            html += '" y="'
-            html += (config#uid#.solar.mppts == 0 || config#uid#.solar.mppts == 1) ? '70' : (config#uid#.solar.mppts > 6 ? '-13' : '10')
-            html += '" width="' + ((config#uid#.solar.mppts > 6) ? '70' : '40') + '" height="' + ((config#uid#.solar.mppts > 6) ? '70' : '40') + '" viewBox="0 0 24 24">'
-            html += '<path fill="var(--solar-color-#uid#)" d="M11.45 2v3.55L15 3.77L11.45 2m-1 6L8 10.46l3.75 1.25L10.45 8M2 11.45L3.77 15l1.78-3.55H2M10 2H2v8c.57.17 1.17.25 1.77.25c3.58.01 6.49-2.9 6.5-6.5c-.01-.59-.1-1.18-.27-1.75m7 20v-6h-3l5-9v6h3l-5 9Z"/></svg>'
+            let x_solar_icon = config#uid#.solar.daily.show === false ? '220' : (config#uid#.solar.mppts > 6 ? '205' : '180')
+            let y_solar_icon = (config#uid#.solar.mppts == 0 || config#uid#.solar.mppts == 1) ? '70' : (config#uid#.solar.mppts > 6 ? '-13' : '10')
+            let w_solar_icon = (config#uid#.solar.mppts > 6) ? '70' : '40'
+            let h_solar_icon = (config#uid#.solar.mppts > 6) ? '70' : '40'
+
+            if (config#uid#.solar.model == 'defaut') {
+                html += '<svg id="pv-icon-#uid#" xmlns="http://www.w3.org/2000/svg" x="' + x_solar_icon + '" y="' + y_solar_icon + '" width="' + w_solar_icon + '" height="' + h_solar_icon + '" viewBox="0 0 24 24">'
+                html += '<path fill="var(--solar-color-#uid#)" d="M11.45 2v3.55L15 3.77L11.45 2m-1 6L8 10.46l3.75 1.25L10.45 8M2 11.45L3.77 15l1.78-3.55H2M10 2H2v8c.57.17 1.17.25 1.77.25c3.58.01 6.49-2.9 6.5-6.5c-.01-.59-.1-1.18-.27-1.75m7 20v-6h-3l5-9v6h3l-5 9Z"/></svg>'
+            } else if (config#uid#.solar.model == 'none') {
+                html += '<rect id="pv-icon-#uid#" x="' + x_solar_icon + '" y="' + y_solar_icon + '" width="' + w_solar_icon + '" height="' + h_solar_icon + '" rx="4.5" ry="4.5" fill="none" stroke="var(--solar-color-#uid#)" pointer-events="all"></rect>'
+            } else {
+                html += '<image id="pv-icon-#uid#" xlink:href="' + config#uid#.solar.model + '" x="' + x_solar_icon + '" y="' + y_solar_icon + '" height="' + h_solar_icon + '" width="' + w_solar_icon + '" preserveAspectRatio="none"></image>'
+            }
             ///  SOLAR DAILY  ///
             if (config#uid#.solar.daily.show) {
               html += '<text id="pv-daily-#uid#" fill="var(--solar-color-#uid#)" x="226" y="'
@@ -3390,18 +3399,23 @@
             const resultMinutes = resultTime.getMinutes() // Get the minutes component of the resulting time
             const formattedMinutes = resultMinutes.toString().padStart(2, "0")
             const formattedHours = resultHours.toString().padStart(2, "0")
-            formattedResultTime = formattedHours + 'h' + formattedMinutes
+            formattedResultTime = formattedHours + ':' + formattedMinutes
             log#uid#('| formatted = ' + formattedResultTime)
             const days = Math.floor(totalSeconds / (60 * 60 * 24))
             const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60))
             const minutes = Math.floor((totalSeconds % (60 * 60)) / 60)
-            if (days > 0) duration += days + ((days == 1) ? ' jour, ' : ' jours, ')
-            if (hours > 0 || days > 0) duration += hours + ((hours <= 1) ? ' hr, ' : ' hrs, ')
-            duration +=  minutes + ' min'
+
+            if (days > 0) duration += days + 'j '
+            if (hours > 0 || days > 0) duration += hours + 'h '
+            duration +=  minutes + 'm'
+
             log#uid#('| duration = ' + duration)
-            document.getElementById("battery-duration-#uid#").innerHTML = duration
-            if (totalBattery <= 0) document.getElementById("battery-duration-text-#uid#").innerHTML = 'CHARGE ' + config#uid#.battery.full_capacity + '% (' + formattedResultTime + ') DANS'
-            else if (totalBattery >= 0) document.getElementById("battery-duration-text-#uid#").innerHTML = 'DÉCHARGE : ' + config#uid#.battery.soc.shutdown + '% ( ' + formattedResultTime + ') DANS'
+            document.getElementById("battery-duration-#uid#").innerHTML = 'DANS ' + duration
+            if (totalBattery < 0) {
+              document.getElementById("battery-duration-text-#uid#").innerHTML = 'CHARGE : ' + config#uid#.battery.full_capacity + '% À ' + formattedResultTime
+            } else if (totalBattery > 0) {
+              document.getElementById("battery-duration-text-#uid#").innerHTML = 'DECHARGE : ' + config#uid#.battery.soc.shutdown + '% À ' + formattedResultTime
+            }
           }
           
           if (timer_in#uid# === false) {

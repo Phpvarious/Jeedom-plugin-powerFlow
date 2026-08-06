@@ -248,6 +248,11 @@ class powerFlow extends eqLogic
 		} else if ($this->getConfiguration('solar::0::color') != '') {
 			$replace['#pvState0Color#'] = $this->getConfiguration('solar::0::color');
 		}
+		if ($this->getConfiguration('solar::img::none', 0) == 1) {
+			$replace['#solarModel#'] = 'none';
+		} else if ($this->getConfiguration('solar::img') != '') {
+			$replace['#solarModel#'] = $this->getConfiguration('solar::img');
+		}
 		///  PVs  \\\
 		$result_pv = array();
 		if ($this->getConfiguration('pv','') != '' && count($this->getConfiguration('pv')) > 0) {
