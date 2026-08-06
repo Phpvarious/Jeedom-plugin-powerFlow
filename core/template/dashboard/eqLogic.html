@@ -1935,8 +1935,6 @@
             if (config#uid#.solar.model == 'defaut') {
                 html += '<svg id="pv-icon-#uid#" xmlns="http://www.w3.org/2000/svg" x="' + x_solar_icon + '" y="' + y_solar_icon + '" width="' + w_solar_icon + '" height="' + h_solar_icon + '" viewBox="0 0 24 24">'
                 html += '<path fill="var(--solar-color-#uid#)" d="M11.45 2v3.55L15 3.77L11.45 2m-1 6L8 10.46l3.75 1.25L10.45 8M2 11.45L3.77 15l1.78-3.55H2M10 2H2v8c.57.17 1.17.25 1.77.25c3.58.01 6.49-2.9 6.5-6.5c-.01-.59-.1-1.18-.27-1.75m7 20v-6h-3l5-9v6h3l-5 9Z"/></svg>'
-            } else if (config#uid#.solar.model == 'none') {
-                html += '<rect id="pv-icon-#uid#" x="' + x_solar_icon + '" y="' + y_solar_icon + '" width="' + w_solar_icon + '" height="' + h_solar_icon + '" rx="4.5" ry="4.5" fill="none" stroke="var(--solar-color-#uid#)" pointer-events="all"></rect>'
             } else {
                 html += '<image id="pv-icon-#uid#" xlink:href="' + config#uid#.solar.model + '" x="' + x_solar_icon + '" y="' + y_solar_icon + '" height="' + h_solar_icon + '" width="' + w_solar_icon + '" preserveAspectRatio="none"></image>'
             }
@@ -2519,8 +2517,6 @@
                 html += '">'
                 html += '<use xlink:href="plugins/powerFlow/desktop/images/icon.svg#icon-transmission-on"/>'
                 html += '</svg>'
-            } else if (config#uid#.grid.model == 'none') {
-                html += '<rect id="grid-icon-#uid#" x="' + (x_grid_icon + 5) + '" y="' + (y_grid_icon + 5) + '" width="52" height="52" rx="4.5" ry="4.5" fill="none" stroke="' + ((config#uid#.grid.status === 0) ? 'var(--no_grid_colour#uid#)' : 'var(--grid-color-#uid#)') + '" pointer-events="all"></rect>'
             } else {
                 html += '<image id="grid-icon-#uid#" xlink:href="' + config#uid#.grid.model + '" x="' + (x_grid_icon + 5) + '" y="' + (y_grid_icon + 5) + '" height="52" width="52" preserveAspectRatio="none"></image>'
             }
