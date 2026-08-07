@@ -445,7 +445,7 @@ function addPv(_action) {
       div += '<div class="col-lg-3">'
         // Alert
         div += '<div class="input-group">'
-          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Alerte}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup></span>'
+          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Alerte}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup></span>'
           div += '<input class="pvAttr form-control" data-l1key="maxAlert">'
           div += '<span class="input-group-btn">'
             div += '<a class="btn btn-default cursor bt_selectDataStore roundedRight" data-type="maxAlert" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>'
@@ -511,7 +511,7 @@ function addLoad(_action) {
         div += '</div>'
         // Alert
         div += '<div class="input-group">'
-          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Alerte}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= a la valeur configurée.}}"></i></sup></span>'
+          div += '<span class="input-group-addon roundedLeft" style="min-width: 110px;">{{Alerte}} <sub>(W)</sub> <sup><i class="fas fa-question-circle" title="{{En alerte si valeur >= à la valeur configurée.}}"></i></sup></span>'
           div += '<input class="loadAttr form-control" data-l1key="maxAlert">'
           div += '<span class="input-group-btn">'
             div += '<a class="btn btn-default cursor bt_selectDataStore roundedRight" data-type="maxAlert" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>'
